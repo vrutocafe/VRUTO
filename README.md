@@ -1064,6 +1064,45 @@
   color: var(--dark);
   letter-spacing: .2px;
 }
+/* ===== EXTRAS DESPLEGABLES ===== */
+
+.extras-dropdown {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--white);
+}
+
+.extras-dropdown summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 14px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+.extras-dropdown summary::-webkit-details-marker {
+  display: none;
+}
+
+.extras-dropdown summary::after {
+  content: "+";
+  color: var(--olive);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.extras-dropdown[open] summary::after {
+  content: "−";
+}
+
+.extras-dropdown .extras-selector {
+  padding: 0 10px 10px;
+}
 </style>
 </head>
 <body>
@@ -1774,30 +1813,33 @@ function renderCart() {
         </div>` : ""}
 
 <div>
-  <label class="extras-title">Extras y agregados</label>
+  <div class="extras-dropdown">
+  <details>
+    <summary>Extras y agregados</summary>
 
-  <div class="extras-selector">
-    ${extraOptions
-      .filter(option => option.active !== false)
-      .map(option => `
-        <label class="extra-option">
-          <span class="extra-option-info">
-            <span class="extra-option-name">
-              ${escapeHTML(option.label.replace(/\s*\(\+\$.*?\)/, ""))}
+    <div class="extras-selector">
+      ${extraOptions
+        .filter(option => option.active !== false)
+        .map(option => `
+          <label class="extra-option">
+            <span class="extra-option-info">
+              <span class="extra-option-name">
+                ${escapeHTML(option.label.replace(/\s*\(\+\$.*?\)/, ""))}
+              </span>
+              <span class="extra-option-price">
+                +${money(option.price)}
+              </span>
             </span>
-            <span class="extra-option-price">
-              +${money(option.price)}
-            </span>
-          </span>
 
-          <input
-            type="checkbox"
-            ${item.extras.includes(option.value) ? "checked" : ""}
-            onchange="toggleExtra('${item.cartId}','${option.value}',this.checked)"
-          >
-        </label>
-      `).join("")}
-  </div>
+            <input
+              type="checkbox"
+              ${item.extras.includes(option.value) ? "checked" : ""}
+              onchange="toggleExtra('${item.cartId}','${option.value}',this.checked)"
+            >
+          </label>
+        `).join("")}
+    </div>
+  </details>
 </div>
           <label for="note-${item.cartId}">Notas de esta bebida</label>
           <textarea id="note-${item.cartId}" placeholder="Ej. sin hielo, poco dulce..."
