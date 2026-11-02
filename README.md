@@ -1291,19 +1291,105 @@ let menuData = [
   {id:20,name:"Pumpkin Spice Frío",displayName:"Pumpkin Spice Frío",category:"Especiales",description:"Pumpkin Spice Latte helado con notas de calabaza y especias.",hot:false,milk:true,coldPrice:85,isSpecial:true}
 ];
 
-const milkOptions = [
-  {value:"Entera",label:"Leche entera"},
-  {value:"Deslactosada",label:"Leche deslactosada"},
-  {value:"Deslactosada Light",label:"Leche deslactosada Light"},
-  {value:"Almendra",label:"Leche de almendra (+$15)",extra:15},
-  {value:"Sin leche",label:"Sin leche"}
-];
+  const milkOptions = [
+    {value:"Entera",label:"Leche entera"},
+    {value:"Deslactosada",label:"Leche deslactosada"},
+    {value:"Deslactosada Light",label:"Leche deslactosada Light"},
+    {value:"Almendra",label:"Leche de almendra (+$15)",extra:15},
+    {value:"Sin leche",label:"Sin leche"}
+  ];
+  
+let extraOptions = [
+  {value:"shot",label:"Shot extra (+$15)",price:15,active:true},
+  {value:"syrup",label:"Jarabe extra (+$15)",price:15,active:true}
+];  
+  async function loadMenuExtras() {
+  try {
 
-const extraOptions = [
-  {value:"shot",label:"Shot extra (+$15)",price:15},
-  {value:"syrup",label:"Jarabe extra (+$15)",price:15}
-];
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/site_settings?select=value&key=eq.menu_extras`,
+      {
+        headers: {
+          apikey: SUPABASE_PUBLIC_KEY,
+          Authorization: `Bearer ${SUPABASE_PUBLIC_KEY}`
+        },
+        cache: "no-store"
+      }
+    );
 
+    if (!response.ok) {
+      throw new Error(`Error al cargar extras: ${response.status}`);
+    }
+
+    const rows = await response.json();
+
+    // Si todavía no existe configuración, conservar extras originales.
+    if (!Array.isArray(rows) || !rows.length) {
+      console.log("VRUTO: Se conservan los extras originales.");
+      return;
+    }
+
+    const savedExtras = rows[0].value?.extras;
+
+    if (!Array.isArray(savedExtras)) return;
+
+    extraOptions = savedExtras
+      .filter(extra =>
+        extra &&
+        extra.active !== false &&
+        typeof extra.value === "string"
+      )
+      .map(extra => ({
+        value: extra.value,
+        label: `${extra.label} (+$${Number(extra.price || 0).toFixed(2)})`,
+        price: Number(extra.price) || 0,
+        active: true
+      }));
+
+    renderCart();
+
+    console.log("VRUTO: Extras actualizados desde Supabase.");
+
+  } catch (error) {
+
+    console.error("No se pudieron cargar los extras:", error);
+
+  }
+}
+
+  try {
+
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "menu_extras")
+      .maybeSingle();
+
+    if (error) throw error;
+
+    // Si todavía no existe configuración, conservamos
+    // los extras originales de VRUTO.
+    if (!data || !Array.isArray(data.value?.extras)) {
+      return;
+    }
+
+    extraOptions = data.value.extras
+      .filter(extra => extra.active !== false)
+      .map(extra => ({
+        value: extra.value,
+        label: `${extra.label} (+$${Number(extra.price).toFixed(0)})`,
+        price: Number(extra.price) || 0
+      }));
+
+    renderCart();
+
+  } catch (error) {
+
+    console.error("Error cargando extras:", error);
+
+  }
+
+}
 let menuCategories = [];
 let cart = [];
 let currentFilter = "Fríos";
@@ -1639,15 +1725,26 @@ function renderCart() {
           </select>
         </div>` : ""}
 
-        <div>
-          <label>Extras (cada uno +$15)</label>
-          ${extraOptions.map(option => `<label style="font-weight:500;display:flex;align-items:center;gap:8px;margin:7px 0">
-            <input type="checkbox" ${item.extras.includes(option.value) ? "checked" : ""}
-              onchange="toggleExtra('${item.cartId}','${option.value}',this.checked)" style="width:auto">
-            ${option.label}
-          </label>`).join("")}
-        </div>
+<div>
+  <label>Extras y agregados</label>
 
+  ${extraOptions
+    .filter(option => option.active !== false)
+    .map(option => `
+      <label style="font-weight:500;display:flex;align-items:center;gap:8px;margin:7px 0">
+
+        <input
+          type="checkbox"
+          ${item.extras.includes(option.value) ? "checked" : ""}
+          onchange="toggleExtra('${item.cartId}','${option.value}',this.checked)"
+          style="width:auto"
+        >
+
+        ${escapeHTML(option.label)}
+
+      </label>
+    `).join("")}
+</div>
         <div>
           <label for="note-${item.cartId}">Notas de esta bebida</label>
           <textarea id="note-${item.cartId}" placeholder="Ej. sin hielo, poco dulce..."
@@ -2083,6 +2180,7 @@ loadMenuBannerFromSupabase();
 renderFilters();
 renderMenu();
 renderCart();
+loadMenuExtras();
 observeRevealElements();
 loadMenuFromSupabase();
 loadSeasonalFromSupabase();
