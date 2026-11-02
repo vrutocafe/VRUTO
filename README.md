@@ -1774,26 +1774,31 @@ function renderCart() {
         </div>` : ""}
 
 <div>
-  <label>Extras y agregados</label>
+  <label class="extras-title">Extras y agregados</label>
 
-  ${extraOptions
-    .filter(option => option.active !== false)
-    .map(option => `
-      <label style="font-weight:500;display:flex;align-items:center;gap:8px;margin:7px 0">
+  <div class="extras-selector">
+    ${extraOptions
+      .filter(option => option.active !== false)
+      .map(option => `
+        <label class="extra-option">
+          <span class="extra-option-info">
+            <span class="extra-option-name">
+              ${escapeHTML(option.label.replace(/\s*\(\+\$.*?\)/, ""))}
+            </span>
+            <span class="extra-option-price">
+              +${money(option.price)}
+            </span>
+          </span>
 
-        <input
-          type="checkbox"
-          ${item.extras.includes(option.value) ? "checked" : ""}
-          onchange="toggleExtra('${item.cartId}','${option.value}',this.checked)"
-          style="width:auto"
-        >
-
-        ${escapeHTML(option.label)}
-
-      </label>
-    `).join("")}
+          <input
+            type="checkbox"
+            ${item.extras.includes(option.value) ? "checked" : ""}
+            onchange="toggleExtra('${item.cartId}','${option.value}',this.checked)"
+          >
+        </label>
+      `).join("")}
+  </div>
 </div>
-        <div>
           <label for="note-${item.cartId}">Notas de esta bebida</label>
           <textarea id="note-${item.cartId}" placeholder="Ej. sin hielo, poco dulce..."
             onchange="updateNote('${item.cartId}',this.value)">${escapeHTML(item.note)}</textarea>
