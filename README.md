@@ -56,12 +56,6 @@
     background: transparent;
   }
 
-  .nav-menu {
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-  }
-
   .header-cart {
     display: inline-flex;
     align-items: center;
@@ -317,18 +311,6 @@
 
   .about p strong { font-size: 12px; }
 
-  footer {
-    background: var(--dark);
-    color: white;
-    text-align: center;
-    padding: 10px 12px 20px;
-    font-size: 11px;
-    line-height: 1.3;
-    margin-bottom: 0;
-  }
-
-  footer p { margin: 0; }
-
   .mobile-cart {
     display: none;
     position: fixed;
@@ -413,37 +395,53 @@
 
   .seasonal-products { display: none; }
 
-  .section-heading h2 a,
-  .section-heading h2 .anchor,
-  .section-heading h2 .header-anchor,
-  .section-heading h2 a.anchor,
-  a.anchor,
-  .anchor,
-  .header-anchor,
-  h1 a,
-  h2 a,
-  h3 a {
-    display: none !important;
+  /* SECCIÓN CÓMO PEDIR CORREGIDA Y VISIBLE */
+  .how-to-order { 
+    background: var(--cream); 
+    padding: 48px 6%; 
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  .how-to-order .section-heading { margin-bottom: 24px !important; }
+  .how-to-order .section-heading h2 { font-size: 26px; margin-bottom: 5px; }
+  .how-to-order .section-heading p { font-size: 13px; }
+
+  .how-to-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
   }
 
-  @keyframes vrutoEntrada {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
+  .how-to-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 15px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    min-width: 0;
   }
 
-  .hero .eyebrow { animation: vrutoEntrada .8s ease-out both; }
-  .hero h1 { animation: vrutoEntrada .9s ease-out .15s both; }
-  .hero p { animation: vrutoEntrada .9s ease-out .3s both; }
-  .hero .primary-btn { animation: vrutoEntrada .9s ease-out .45s both; }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity .7s ease, transform .7s ease;
+  .how-to-number {
+    flex: 0 0 29px;
+    width: 29px;
+    height: 29px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--olive);
+    color: white;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
   }
 
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  .product.reveal { transition-delay: var(--delay, 0ms); }
+  .how-to-card h3 { font-size: 14px; line-height: 1.3; margin: 2px 0 5px; }
+  .how-to-card p { font-size: 12px; line-height: 1.5; color: var(--muted); margin: 0; }
 
   .cart-quantity { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
 
@@ -471,8 +469,6 @@
     transform: translateY(-1px);
   }
 
-  .cart-quantity button:active { transform: scale(.94); }
-
   .cart-quantity .quantity-number {
     min-width: 18px;
     text-align: center;
@@ -482,8 +478,6 @@
   }
 
   .cart-quantity .quantity-label { font-size: 12px; color: #858575; }
-  .cart-remove { border: none; background: transparent; color: #9a766c; font-size: 12px; cursor: pointer; padding: 6px 0; }
-  .cart-remove:hover { color: #b34738; }
 
   .discount-box {
     margin-top: 20px;
@@ -550,8 +544,6 @@
     background: none !important;
     border: none !important;
     box-shadow: none !important;
-    filter: none !important;
-    mix-blend-mode: normal;
     object-fit: contain;
   }
 
@@ -564,99 +556,6 @@
     padding: 0;
     line-height: 1.2;
     font-size: 11px;
-  }
-
-  .how-to-order { background: var(--cream); padding: 24px 6%; }
-  .how-to-order .section-heading { margin-bottom: 12px !important; }
-  .how-to-order .section-heading h2 { font-size: 26px; margin-bottom: 5px; }
-  .how-to-order .section-heading p { font-size: 13px; }
-
-  .how-to-grid {
-    max-width: 900px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .how-to-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 11px;
-    padding: 15px;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    min-width: 0;
-    opacity: 0;
-    animation: vrutoStepAppear .6s ease forwards;
-    transition: transform .25s ease, box-shadow .25s ease;
-  }
-
-  .how-to-number {
-    flex: 0 0 29px;
-    width: 29px;
-    height: 29px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--olive);
-    color: white;
-    border-radius: 50%;
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  .how-to-card h3 { font-size: 14px; line-height: 1.3; margin: 2px 0 5px; }
-  .how-to-card p { font-size: 12px; line-height: 1.5; color: var(--muted); margin: 0; }
-  .how-to-card:nth-child(1) { animation-delay: .1s; }
-  .how-to-card:nth-child(2) { animation-delay: .25s; }
-  .how-to-card:nth-child(3) { animation-delay: .4s; }
-  .how-to-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(49,57,37,.10); }
-
-  .vruto-instagram {
-    background: var(--cream);
-    padding: 48px 18px 15px;
-    text-align: center;
-    overflow: hidden;
-    margin-bottom: 0 !important;
-  }
-
-  .instagram-heading { margin: 0 auto 10px !important; }
-  .instagram-eyebrow { display: inline-block; color: var(--olive); font-size: 10px; font-weight: 700; letter-spacing: 3px; margin-bottom: 8px; }
-
-  .instagram-heading h2 {
-    color: var(--dark);
-    font-size: clamp(25px, 4vw, 34px);
-    font-weight: 600;
-    letter-spacing: -1px;
-    line-height: 1.2;
-    margin: 5px 0 9px;
-  }
-
-  .instagram-heading p { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0 auto; }
-
-  .instagram-reels {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-    max-width: 400px !important;
-    margin: 0 auto !important;
-    padding-bottom: 0 !important;
-  }
-
-  .instagram-reels > .instagram-media {
-    display: block !important;
-    flex: 0 1 380px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    max-width: 380px !important;
-    margin: 0 auto !important;
-    box-sizing: border-box !important;
-    background: var(--white) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 20px !important;
-    box-shadow: 0 10px 28px rgba(52,58,39,.09) !important;
   }
 
   .customer-drink-field {
@@ -768,6 +667,9 @@
       margin: 0 auto;
     }
 
+    .how-to-grid { grid-template-columns: 1fr; gap: 8px; }
+    .how-to-card { padding: 11px 12px; gap: 10px; border-radius: 10px; }
+
     .mobile-cart {
       display: flex;
       align-items: center;
@@ -787,6 +689,11 @@
       color: var(--white);
       box-shadow: 0 5px 22px rgba(0,0,0,.20);
     }
+  }
+
+  @media (max-width: 650px) {
+    .seasonal { grid-template-columns: 1fr; gap: 25px; padding: 40px 6%; }
+    .seasonal-image { height: 290px; }
   }
 </style>
 </head>
