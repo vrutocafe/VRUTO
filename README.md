@@ -1356,40 +1356,6 @@ let extraOptions = [
 
   }
 }
-
-  try {
-
-    const { data, error } = await supabase
-      .from("site_settings")
-      .select("value")
-      .eq("key", "menu_extras")
-      .maybeSingle();
-
-    if (error) throw error;
-
-    // Si todavía no existe configuración, conservamos
-    // los extras originales de VRUTO.
-    if (!data || !Array.isArray(data.value?.extras)) {
-      return;
-    }
-
-    extraOptions = data.value.extras
-      .filter(extra => extra.active !== false)
-      .map(extra => ({
-        value: extra.value,
-        label: `${extra.label} (+$${Number(extra.price).toFixed(0)})`,
-        price: Number(extra.price) || 0
-      }));
-
-    renderCart();
-
-  } catch (error) {
-
-    console.error("Error cargando extras:", error);
-
-  }
-
-}
 let menuCategories = [];
 let cart = [];
 let currentFilter = "Fríos";
@@ -2180,7 +2146,7 @@ loadMenuBannerFromSupabase();
 renderFilters();
 renderMenu();
 renderCart();
-loadMenuExtras();
+//loadMenuExtras();
 observeRevealElements();
 loadMenuFromSupabase();
 loadSeasonalFromSupabase();
