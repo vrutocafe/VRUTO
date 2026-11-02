@@ -2146,7 +2146,7 @@ loadMenuBannerFromSupabase();
 renderFilters();
 renderMenu();
 renderCart();
-//loadMenuExtras();
+loadMenuExtras();
 observeRevealElements();
 loadMenuFromSupabase();
 loadSeasonalFromSupabase();
