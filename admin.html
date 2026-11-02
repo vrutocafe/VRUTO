@@ -772,8 +772,17 @@ img.preview{
               <h2>Códigos promocionales</h2>
               <p class="muted">Crea y administra descuentos para tus clientes.</p>
             </div>
+            <div id="extrasTab" style="display:none;">
+
+  <div class="section-header">
+    <div>
+      <h3>Extras y agregados</h3>
+      <p>Administra los extras disponibles en tu menú.</p>
+    </div>
+
             <button id="newDiscountBtn" class="btn" type="button">+ Nuevo código</button>
           </div>
+        </div>
           <div id="extrasTab" style="display:none;">
 
   <div class="section-header">
@@ -1479,7 +1488,6 @@ img.preview{
     }
   });
 async function loadExtraOptions() {
-
   const { data, error } = await supabaseClient
     .from('site_settings')
     .select('value')
@@ -1488,13 +1496,35 @@ async function loadExtraOptions() {
 
   if (error) throw error;
 
-  extraOptions = Array.isArray(data?.value?.extras)
+  // Si todavía no existe configuración, conservar los extras originales.
+  if (!data) {
+    extraOptions = [
+      {
+        id: 'shot-extra',
+        value: 'shot',
+        label: 'Shot extra',
+        price: 15,
+        active: true
+      },
+      {
+        id: 'syrup-extra',
+        value: 'syrup',
+        label: 'Jarabe extra',
+        price: 15,
+        active: true
+      }
+    ];
+
+    renderExtraOptions();
+    return;
+  }
+
+  extraOptions = Array.isArray(data.value?.extras)
     ? data.value.extras
     : [];
 
   renderExtraOptions();
 }
-
 
 function renderExtraOptions() {
 
