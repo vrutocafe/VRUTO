@@ -708,6 +708,9 @@ img.preview{
           <button class="btn active" data-tab="products" type="button">Productos</button>
           <button class="btn secondary" data-tab="categories" type="button">Categorías</button>
           <button class="btn secondary" data-tab="discounts" type="button">Códigos de descuento</button>
+          <button class="btn secondary" data-tab="extras" type="button">
+  Extras y agregados
+</button>
         </div>
 
         <div id="productsTab">
@@ -771,6 +774,63 @@ img.preview{
             </div>
             <button id="newDiscountBtn" class="btn" type="button">+ Nuevo código</button>
           </div>
+          <div id="extrasTab" style="display:none;">
+
+  <div class="section-header">
+    <div>
+      <h3>Extras y agregados</h3>
+      <p>Administra los extras disponibles en tu menú.</p>
+    </div>
+
+    <button class="btn" id="newExtraBtn" type="button">
+      + Nuevo extra
+    </button>
+  </div>
+
+  <div id="extraList"></div>
+
+  <div id="extraEditor" style="display:none;">
+
+    <h3 id="extraEditorTitle">Nuevo extra</h3>
+
+    <form id="extraForm">
+
+      <input type="hidden" id="extraId">
+
+      <label for="extraName">Nombre del extra</label>
+      <input
+        id="extraName"
+        type="text"
+        placeholder="Ej. Shot extra"
+        required
+      >
+
+      <label for="extraPrice">Precio adicional</label>
+      <input
+        id="extraPrice"
+        type="number"
+        min="0"
+        step="0.01"
+        placeholder="15"
+        required
+      >
+
+      <label>
+        <input id="extraActive" type="checkbox" checked>
+        Extra activo
+      </label>
+
+      <div class="actions">
+        <button class="btn" type="submit">Guardar extra</button>
+        <button class="btn secondary" id="cancelExtraBtn" type="button">
+          Cancelar
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>
 
           <div id="discountList" class="list">
             <div class="empty">Cargando códigos...</div>
@@ -1000,6 +1060,7 @@ img.preview{
   let supabaseClient = null;
   let products = [];
   let categories = [];
+  let extraOptions = [];
   let activeProductGroup = 'cold';
   let productSearch = '';
   let selectedProductImage = null;
@@ -1417,7 +1478,252 @@ img.preview{
       }
     }
   });
+async function loadExtraOptions() {
 
+  const { data, error } = await supabaseClient
+    .from('site_settings')
+    .select('value')
+    .eq('key', 'menu_extras')
+    .maybeSingle();
+
+  if (error) throw error;
+
+  extraOptions = Array.isArray(data?.value?.extras)
+    ? data.value.extras
+    : [];
+
+  renderExtraOptions();
+}
+
+
+function renderExtraOptions() {
+
+  const container = $('extraList');
+
+  if (!extraOptions.length) {
+    container.innerHTML = `
+      <p>Todavía no tienes extras registrados.</p>
+    `;
+    return;
+  }
+
+  container.innerHTML = extraOptions.map(extra => `
+    <div class="card" style="margin-bottom:12px;padding:15px;">
+
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+
+        <div>
+          <strong>${safe(extra.label)}</strong>
+          <p>$${Number(extra.price).toFixed(2)}</p>
+          <small>
+            ${extra.active ? 'Activo' : 'Inactivo'}
+          </small>
+        </div>
+
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+
+          <button
+            class="btn secondary"
+            data-edit-extra="${safe(extra.id)}"
+            type="button">
+            Editar
+          </button>
+
+          <button
+            class="btn secondary"
+            data-toggle-extra="${safe(extra.id)}"
+            type="button">
+            ${extra.active ? 'Desactivar' : 'Activar'}
+          </button>
+
+          <button
+            class="btn secondary"
+            data-delete-extra="${safe(extra.id)}"
+            type="button">
+            Eliminar
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+  `).join('');
+
+}
+
+
+function openExtraEditor(extra = null) {
+
+  $('extraId').value = extra?.id || '';
+  $('extraName').value = extra?.label || '';
+  $('extraPrice').value = extra?.price ?? 15;
+  $('extraActive').checked = extra ? extra.active !== false : true;
+
+  $('extraEditorTitle').textContent = extra
+    ? 'Editar extra'
+    : 'Nuevo extra';
+
+  show('extraEditor', true);
+
+}
+
+
+async function saveExtraOptions(nextExtras) {
+
+  const { error } = await supabaseClient
+    .from('site_settings')
+    .upsert({
+      key: 'menu_extras',
+      value: { extras: nextExtras },
+      updated_at: new Date().toISOString()
+    }, {
+      onConflict: 'key'
+    });
+
+  if (error) throw error;
+
+  extraOptions = nextExtras;
+
+  renderExtraOptions();
+
+}
+
+
+// Botón nuevo extra
+$('newExtraBtn').addEventListener('click', () => {
+  openExtraEditor();
+});
+
+
+// Botón cancelar
+$('cancelExtraBtn').addEventListener('click', () => {
+  show('extraEditor', false);
+});
+
+
+// Guardar extra
+$('extraForm').addEventListener('submit', async event => {
+
+  event.preventDefault();
+
+  const id = $('extraId').value;
+  const label = $('extraName').value.trim();
+  const price = Number($('extraPrice').value);
+
+  if (!label || !Number.isFinite(price) || price < 0) {
+    alert('Revisa el nombre y el precio del extra.');
+    return;
+  }
+
+  const duplicate = extraOptions.some(extra =>
+    extra.label.toLowerCase() === label.toLowerCase() &&
+    extra.id !== id
+  );
+
+  if (duplicate) {
+    alert('Ya existe un extra con ese nombre.');
+    return;
+  }
+
+  const existing = extraOptions.find(extra => extra.id === id);
+
+  const newExtra = {
+    id: id || crypto.randomUUID(),
+
+    // La clave se conserva al editar.
+    value: existing?.value || crypto.randomUUID(),
+
+    label,
+    price,
+    active: $('extraActive').checked
+  };
+
+  const nextExtras = id
+    ? extraOptions.map(extra =>
+        extra.id === id ? newExtra : extra
+      )
+    : [...extraOptions, newExtra];
+
+  try {
+
+    await saveExtraOptions(nextExtras);
+
+    show('extraEditor', false);
+
+  } catch (error) {
+
+    console.error(error);
+    alert('No se pudo guardar el extra.');
+
+  }
+
+});
+
+
+// Acciones de la lista
+$('extraList').addEventListener('click', async event => {
+
+  const button = event.target.closest('button');
+
+  if (!button) return;
+
+  const id =
+    button.dataset.editExtra ||
+    button.dataset.toggleExtra ||
+    button.dataset.deleteExtra;
+
+  const extra = extraOptions.find(item => item.id === id);
+
+  if (!extra) return;
+
+  if (button.dataset.editExtra) {
+    openExtraEditor(extra);
+    return;
+  }
+
+  if (button.dataset.toggleExtra) {
+
+    try {
+
+      const nextExtras = extraOptions.map(item =>
+        item.id === id
+          ? { ...item, active: !item.active }
+          : item
+      );
+
+      await saveExtraOptions(nextExtras);
+
+    } catch (error) {
+
+      console.error(error);
+      alert('No se pudo actualizar el extra.');
+
+    }
+
+    return;
+  }
+
+  if (button.dataset.deleteExtra) {
+
+    if (!confirm(`¿Eliminar "${extra.label}"?`)) return;
+
+    try {
+
+      const nextExtras = extraOptions.filter(item => item.id !== id);
+
+      await saveExtraOptions(nextExtras);
+
+    } catch (error) {
+
+      console.error(error);
+      alert('No se pudo eliminar el extra.');
+
+    }
+
+  }
+
+});
   async function loadAll() {
     if (!supabaseClient) {
       throw new Error('Primero conecta tu proyecto Supabase.');
@@ -1441,7 +1747,8 @@ img.preview{
     await Promise.all([
       loadSeasonSettings(),
       loadBannerSettings(),
-      loadDiscountCodes()
+      loadDiscountCodes(),
+      loadExtraOptions()
     ]);
   }
 
@@ -1825,7 +2132,9 @@ img.preview{
     show('globalMsg', false);
   });
 
-  document.querySelectorAll('[data-tab]').forEach(b => b.addEventListener('click', () => {
+document.querySelectorAll('[data-tab]').forEach(b => {
+  b.addEventListener('click', () => {
+
     document.querySelectorAll('[data-tab]').forEach(x => {
       x.classList.toggle('active', x === b);
       x.classList.toggle('secondary', x !== b);
@@ -1834,11 +2143,15 @@ img.preview{
     show('productsTab', b.dataset.tab === 'products');
     show('categoriesTab', b.dataset.tab === 'categories');
     show('discountsTab', b.dataset.tab === 'discounts');
+    show('extrasTab', b.dataset.tab === 'extras');
 
     show('editorPanel', false);
     show('categoryEditor', false);
-  }));
+    show('discountEditor', false);
+    show('extraEditor', false);
 
+  });
+});
   document.querySelectorAll('[data-product-group]').forEach(button => {
     button.addEventListener('click', () => {
       activeProductGroup = button.dataset.productGroup;
