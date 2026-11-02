@@ -863,8 +863,8 @@ img.preview{
 
   <div id="extraList"></div>
 
-  <div id="extraEditor" style="display:none;">
-    <h3 id="extraEditorTitle">Nuevo extra</h3>
+<div id="extraEditor" class="hidden">
+  <h3 id="extraEditorTitle">Nuevo extra</h3>
 
     <form id="extraForm">
       <input type="hidden" id="extraId">
@@ -1580,8 +1580,7 @@ function openExtraEditor(extra = null) {
 
   const editor = $('extraEditor');
 
-  editor.style.display = 'block';
-
+show('extraEditor', true);
 }
 
 async function saveExtraOptions(nextExtras) {
@@ -1612,9 +1611,7 @@ $('newExtraBtn').addEventListener('click', () => {
 
 
 // Botón cancelar
-$('cancelExtraBtn').addEventListener('click', () => {
-  $('extraEditor').style.display = 'none';
-});
+$('cancelExtraBtn').addEventListener('click', () => show('extraEditor', false));});
 
 // Guardar extra
 $('extraForm').addEventListener('submit', async event => {
@@ -1663,7 +1660,7 @@ $('extraForm').addEventListener('submit', async event => {
 
     await saveExtraOptions(nextExtras);
 
-$('extraEditor').style.display = 'none';
+show('extraEditor', false);
   } catch (error) {
 
     console.error(error);
