@@ -982,6 +982,88 @@
   height: 22px;
   flex-shrink: 0;
 }
+/* ===== SELECTOR DE EXTRAS VRUTO ===== */
+
+.cart-options .extras-selector {
+  display: grid;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.cart-options .extra-option {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 !important;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--white);
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+
+.cart-options .extra-option:has(input:checked) {
+  background: #f0f1e8;
+  border-color: var(--olive);
+}
+
+.cart-options .extra-option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cart-options .extra-option-name {
+  color: var(--dark);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cart-options .extra-option-price {
+  color: var(--olive);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.cart-options .extra-option input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: 0 0 20px;
+  width: 20px !important;
+  height: 20px;
+  margin: 0;
+  border: 1.5px solid #b9bea9;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+}
+
+.cart-options .extra-option input[type="checkbox"]:checked {
+  background: var(--olive);
+  border-color: var(--olive);
+  position: relative;
+}
+
+.cart-options .extra-option input[type="checkbox"]:checked::after {
+  content: "✓";
+  display: block;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  line-height: 18px;
+}
+
+.cart-options .extras-title {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: .2px;
+}
 </style>
 </head>
 <body>
