@@ -1574,10 +1574,11 @@ function openExtraEditor(extra = null) {
     ? 'Editar extra'
     : 'Nuevo extra';
 
-  show('extraEditor', true);
+  const editor = $('extraEditor');
+
+  editor.style.display = 'block';
 
 }
-
 
 async function saveExtraOptions(nextExtras) {
 
@@ -1608,9 +1609,8 @@ $('newExtraBtn').addEventListener('click', () => {
 
 // Botón cancelar
 $('cancelExtraBtn').addEventListener('click', () => {
-  show('extraEditor', false);
+  $('extraEditor').style.display = 'none';
 });
-
 
 // Guardar extra
 $('extraForm').addEventListener('submit', async event => {
@@ -1659,8 +1659,7 @@ $('extraForm').addEventListener('submit', async event => {
 
     await saveExtraOptions(nextExtras);
 
-    show('extraEditor', false);
-
+$('extraEditor').style.display = 'none';
   } catch (error) {
 
     console.error(error);
