@@ -56,6 +56,12 @@
     background: transparent;
   }
 
+  .nav-menu {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+
   .header-cart {
     display: inline-flex;
     align-items: center;
@@ -169,11 +175,6 @@
     gap: 17px;
     max-width: 1100px;
     margin: auto;
-  }
-
-  .menu-grid:has(.product:only-child) {
-    grid-template-columns: minmax(220px, 320px);
-    justify-content: center;
   }
 
   .product {
@@ -311,6 +312,18 @@
 
   .about p strong { font-size: 12px; }
 
+  footer {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 10px 12px 20px;
+    font-size: 11px;
+    line-height: 1.3;
+    margin-bottom: 0;
+  }
+
+  footer p { margin: 0; }
+
   .mobile-cart {
     display: none;
     position: fixed;
@@ -327,6 +340,7 @@
     font-weight: 700;
   }
 
+  /* SECCIÓN DE TEMPORADA */
   .seasonal {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -395,53 +409,37 @@
 
   .seasonal-products { display: none; }
 
-  /* SECCIÓN CÓMO PEDIR CORREGIDA Y VISIBLE */
-  .how-to-order { 
-    background: var(--cream); 
-    padding: 48px 6%; 
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-  .how-to-order .section-heading { margin-bottom: 24px !important; }
-  .how-to-order .section-heading h2 { font-size: 26px; margin-bottom: 5px; }
-  .how-to-order .section-heading p { font-size: 13px; }
-
-  .how-to-grid {
-    max-width: 900px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
+  .section-heading h2 a,
+  .section-heading h2 .anchor,
+  .section-heading h2 .header-anchor,
+  .section-heading h2 a.anchor,
+  a.anchor,
+  .anchor,
+  .header-anchor,
+  h1 a,
+  h2 a,
+  h3 a {
+    display: none !important;
   }
 
-  .how-to-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 11px;
-    padding: 15px;
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    min-width: 0;
+  @keyframes vrutoEntrada {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
-  .how-to-number {
-    flex: 0 0 29px;
-    width: 29px;
-    height: 29px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--olive);
-    color: white;
-    border-radius: 50%;
-    font-size: 13px;
-    font-weight: 700;
+  .hero .eyebrow { animation: vrutoEntrada .8s ease-out both; }
+  .hero h1 { animation: vrutoEntrada .9s ease-out .15s both; }
+  .hero p { animation: vrutoEntrada .9s ease-out .3s both; }
+  .hero .primary-btn { animation: vrutoEntrada .9s ease-out .45s both; }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s ease, transform .7s ease;
   }
 
-  .how-to-card h3 { font-size: 14px; line-height: 1.3; margin: 2px 0 5px; }
-  .how-to-card p { font-size: 12px; line-height: 1.5; color: var(--muted); margin: 0; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .product.reveal { transition-delay: var(--delay, 0ms); }
 
   .cart-quantity { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
 
@@ -469,6 +467,8 @@
     transform: translateY(-1px);
   }
 
+  .cart-quantity button:active { transform: scale(.94); }
+
   .cart-quantity .quantity-number {
     min-width: 18px;
     text-align: center;
@@ -478,6 +478,8 @@
   }
 
   .cart-quantity .quantity-label { font-size: 12px; color: #858575; }
+  .cart-remove { border: none; background: transparent; color: #9a766c; font-size: 12px; cursor: pointer; padding: 6px 0; }
+  .cart-remove:hover { color: #b34738; }
 
   .discount-box {
     margin-top: 20px;
@@ -516,6 +518,28 @@
   .discount-amount { color: #426b36; font-weight: 700; }
   .final-total { font-size: 21px; }
 
+  .social-footer {
+    background: #f4f0e6;
+    color: #454a35;
+    text-align: center;
+    padding: 45px 20px 30px;
+    margin-top: 50px;
+  }
+
+  .social-footer h2 { letter-spacing: 3px; margin-bottom: 8px; }
+  .social-footer p { margin-bottom: 22px; }
+
+  .social-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 4px 0;
+  }
+
+  .social-links a { color: var(--olive); text-decoration: none; font-weight: 600; }
+  .social-links a:hover { color: #454a35; }
+
   .main-footer {
     background: var(--olive);
     color: var(--white);
@@ -544,6 +568,8 @@
     background: none !important;
     border: none !important;
     box-shadow: none !important;
+    filter: none !important;
+    mix-blend-mode: normal;
     object-fit: contain;
   }
 
@@ -558,63 +584,368 @@
     font-size: 11px;
   }
 
-  .customer-drink-field {
-    margin: 14px 0;
-    padding: 14px;
-    background: #f7f6f0;
-    border: 1px solid #e7e5da;
-    border-radius: 12px;
+  .how-to-order { background: var(--cream); padding: 24px 6%; }
+  .how-to-order .section-heading { margin-bottom: 12px !important; }
+  .how-to-order .section-heading h2 { font-size: 26px; margin-bottom: 5px; }
+  .how-to-order .section-heading p { font-size: 13px; }
+
+  .how-to-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
   }
 
-  .customer-drink-field > label {
+  .how-to-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 15px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    min-width: 0;
+    opacity: 0;
+    animation: vrutoStepAppear .6s ease forwards;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+
+  .how-to-number {
+    flex: 0 0 29px;
+    width: 29px;
+    height: 29px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 9px;
-  }
-
-  .customer-drink-label {
-    color: #454938;
+    justify-content: center;
+    background: var(--olive);
+    color: white;
+    border-radius: 50%;
     font-size: 13px;
+    font-weight: 700;
+  }
+
+  .how-to-card h3 { font-size: 14px; line-height: 1.3; margin: 2px 0 5px; }
+  .how-to-card p { font-size: 12px; line-height: 1.5; color: var(--muted); margin: 0; }
+  .how-to-card:nth-child(1) { animation-delay: .1s; }
+  .how-to-card:nth-child(2) { animation-delay: .25s; }
+  .how-to-card:nth-child(3) { animation-delay: .4s; }
+  .how-to-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(49,57,37,.10); }
+  .how-to-order { padding-bottom: 8px !important; margin-bottom: 0 !important; }
+  .how-to-grid { margin-bottom: 0 !important; }
+  #menu { margin-top: 0 !important; padding-top: 20px !important; }
+
+  @keyframes vrutoStepAppear {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .vruto-instagram {
+    background: var(--cream);
+    padding: 48px 18px 15px;
+    text-align: center;
+    overflow: hidden;
+    margin-bottom: 0 !important;
+  }
+
+  .instagram-heading { margin: 0 auto 10px !important; }
+  .instagram-eyebrow { display: inline-block; color: var(--olive); font-size: 10px; font-weight: 700; letter-spacing: 3px; margin-bottom: 8px; }
+
+  .instagram-heading h2 {
+    color: var(--dark);
+    font-size: clamp(25px, 4vw, 34px);
     font-weight: 600;
+    letter-spacing: -1px;
+    line-height: 1.2;
+    margin: 5px 0 9px;
   }
 
-  .customer-drink-optional {
-    color: #858576;
-    font-size: 10px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: .06em;
+  .instagram-heading p { color: var(--muted); font-size: 13px; line-height: 1.7; margin: 0 auto; }
+
+  .instagram-reels {
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+    padding-bottom: 0 !important;
   }
 
-  .customer-drink-field input {
-    box-sizing: border-box;
-    width: 100%;
-    min-height: 44px;
-    padding: 11px 12px;
-    border: 1px solid #deded2;
-    border-radius: 8px;
-    background: #fffefa;
-    color: #34372b;
-    font: inherit;
-    font-size: 14px;
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
+  .instagram-reels > .instagram-media {
+    display: block !important;
+    flex: 0 1 380px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 380px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    background: var(--white) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 28px rgba(52,58,39,.09) !important;
   }
 
-  .customer-drink-field input:focus {
-    border-color: #69734b;
-    box-shadow: 0 0 0 3px rgba(105, 115, 75, .12);
+  .vruto-instagram + section { margin-top: 0 !important; padding-top: 20px !important; }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
   }
 
-  .customer-drink-field p {
-    margin: 8px 0 0;
-    color: #858576;
-    font-size: 11px;
-    line-height: 1.5;
+  body { height: auto !important; }
+  main, .main-footer { margin-bottom: 0 !important; padding-bottom: 0; }
+  body > script { display: none !important; }
+
+  @media (max-width: 700px) {
+    .brand-logo img { width: 100px; max-height: 50px; }
+    .site-header { padding: 12px 4%; gap: 10px; }
+    .header-cart { gap: 7px; padding: 10px 12px; font-size: 12px; }
+    .header-cart svg { width: 20px; height: 20px; }
+    .cart-badge { min-width: 22px; height: 22px; }
+    .hero { padding: 55px 6%; }
+    section { padding: 38px 5%; }
+    .order-layout { grid-template-columns: 1fr; }
+    .menu-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .product { padding: 14px; min-height: 215px; }
+    .product h3 { font-size: 16px; }
+    .product-top { flex-direction: column; gap: 5px; }
+    .price { font-size: 15px; }
+
+    .mobile-cart {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: fixed;
+      z-index: 999;
+      left: 12px;
+      right: 12px;
+      bottom: calc(12px + env(safe-area-inset-bottom));
+      width: auto;
+      min-height: 64px;
+      padding: 12px 17px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      background: var(--dark);
+      color: var(--white);
+      box-shadow: 0 5px 22px rgba(0,0,0,.20);
+      text-align: left;
+    }
+
+    .mobile-cart-info { display: flex; flex-direction: column; gap: 4px; }
+    #mobileCartLabel { font-size: 14px; font-weight: 700; }
+    .mobile-cart-detail { color: #e8e5d9; font-size: 12px; font-weight: 500; }
+    .mobile-cart-action { flex-shrink: 0; background: var(--butter); color: var(--dark); padding: 10px 13px; border-radius: 24px; font-size: 12px; font-weight: 700; }
+
+    #pedido {
+      width: 100%;
+      min-width: 0;
+      padding-left: 12px;
+      padding-right: 12px;
+      overflow: hidden;
+    }
+
+    #pedido .order-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      gap: 16px;
+    }
+
+    #pedido .panel {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      padding: 16px;
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    #pedido #cartItems,
+    #pedido .cart-item,
+    #pedido .cart-item-head,
+    #pedido .cart-options,
+    #pedido .field,
+    #pedido form {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    #pedido .cart-item-head { align-items: flex-start; overflow-wrap: anywhere; gap: 8px; font-size: 13px; }
+    #pedido .cart-item-head span { min-width: 0; overflow-wrap: anywhere; }
+
+    #pedido .field input,
+    #pedido .field select,
+    #pedido .field textarea,
+    #pedido .cart-options select,
+    #pedido .cart-options textarea {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+
+    #pedido .discount-input-row { display: flex; width: 100%; min-width: 0; gap: 6px; }
+    #pedido .discount-input-row input { flex: 1 1 0; width: 0; min-width: 0; }
+    #pedido .discount-input-row button { flex: 0 0 auto; padding-left: 10px; padding-right: 10px; }
+    #pedido .total-row { gap: 8px; font-size: 15px; }
+    #pedido .total-row span { min-width: 0; overflow-wrap: anywhere; }
+    #pedido .final-total { font-size: 17px; }
+    #pedido .notice { overflow-wrap: anywhere; }
+
+    .how-to-order { padding: 20px 5%; }
+    .how-to-order .section-heading { margin-bottom: 12px; }
+    .how-to-order .section-heading h2 { font-size: 23px; }
+    .how-to-grid { grid-template-columns: 1fr; gap: 8px; }
+    .how-to-card { padding: 11px 12px; gap: 10px; border-radius: 10px; }
+    .how-to-number { flex-basis: 26px; width: 26px; height: 26px; font-size: 12px; }
+    .how-to-card h3 { font-size: 13px; margin: 1px 0 3px; }
+    .how-to-card p { font-size: 11px; line-height: 1.4; }
+
+    .vruto-instagram { padding: 36px 14px 15px; }
+    .instagram-reels { max-width: 100% !important; }
+    .instagram-reels > .instagram-media { max-width: 380px !important; }
+
+    .add-btn, .filter, .cart-quantity button, .whatsapp-btn {
+      min-height: 44px;
+      touch-action: manipulation;
+    }
+
+    input, select, textarea { font-size: 16px; }
+    footer { padding: 8px 10px 20px !important; font-size: 10px; line-height: 1.2; }
+    footer strong { font-size: 11px; }
   }
 
+  @media (max-width: 650px) {
+    .seasonal { grid-template-columns: 1fr; gap: 25px; padding: 40px 6%; }
+    .seasonal-image { height: 290px; }
+  }
+
+  @media (max-width: 480px) {
+    .vruto-instagram { padding: 36px 14px 15px; }
+  }
+
+  @media (max-width: 370px) {
+    .menu-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .hero .eyebrow, .hero h1, .hero p, .hero .primary-btn,
+    .reveal, .vruto-instagram.reveal, .vruto-instagram.reveal.visible,
+    .how-to-order .section-heading, .how-to-card {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+  
+/* Nombre de quien recibe cada bebida */
+.customer-drink-field {
+  margin: 14px 0;
+  padding: 14px;
+  background: #f7f6f0;
+  border: 1px solid #e7e5da;
+  border-radius: 12px;
+}
+
+.customer-drink-field > label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+.customer-drink-label {
+  color: #454938;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.customer-drink-optional {
+  color: #858576;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.customer-drink-field input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 12px;
+  border: 1px solid #deded2;
+  border-radius: 8px;
+  background: #fffefa;
+  color: #34372b;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.customer-drink-field input:focus {
+  border-color: #69734b;
+  box-shadow: 0 0 0 3px rgba(105, 115, 75, .12);
+}
+
+.customer-drink-field input::placeholder {
+  color: #a19f92;
+}
+
+.customer-drink-field p {
+  margin: 8px 0 0;
+  color: #858576;
+  font-size: 11px;
+  line-height: 1.5;
+}
+  /* Cuadrícula estándar del menú */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 17px;
+    max-width: 1100px;
+    margin: auto;
+  }
+
+  /* Si solo hay un artículo en la categoría, limitamos el ancho de la cuadrícula para que no se expanda y quede centrado */
+  .menu-grid:has(.product:only-child) {
+    grid-template-columns: minmax(220px, 320px);
+    justify-content: center;
+  }
+
+  /* Ajuste específico para celulares cuando hay un solo artículo */
+  @media (max-width: 700px) {
+    .menu-grid {
+      grid-template-columns: 1fr 1fr; /* Mantiene 2 columnas cuando hay varios productos */
+      gap: 10px;
+    }
+
+    .menu-grid:has(.product:only-child) {
+      grid-template-columns: 1fr; /* Una sola columna */
+      max-width: 260px;           /* Ancho idéntico al de las demás tarjetas en móvil */
+      margin: 0 auto;             /* Centrado automático */
+    }
+  }
+  
+  .settings-fab:hover {
+    background: var(--olive);
+    transform: scale(1.05);
+  }
+
+  .settings-fab svg {
+    width: 20px;
+    height: 20px;
+  }
+  /* Estilo para el botón de ajustes junto al footer */
   .footer-settings-btn {
     display: inline-flex;
     align-items: center;
@@ -640,61 +971,17 @@
     width: 14px;
     height: 14px;
   }
+.cart-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
 
-  .cart-title {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-  }
-
-  .cart-title svg {
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
-  }
-
-  @media (max-width: 700px) {
-    .brand-logo img { width: 100px; max-height: 50px; }
-    .site-header { padding: 12px 4%; gap: 10px; }
-    .header-cart { gap: 7px; padding: 10px 12px; font-size: 12px; }
-    .hero { padding: 55px 6%; }
-    section { padding: 38px 5%; }
-    .order-layout { grid-template-columns: 1fr; }
-    .menu-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-    .menu-grid:has(.product:only-child) {
-      grid-template-columns: 1fr;
-      max-width: 260px;
-      margin: 0 auto;
-    }
-
-    .how-to-grid { grid-template-columns: 1fr; gap: 8px; }
-    .how-to-card { padding: 11px 12px; gap: 10px; border-radius: 10px; }
-
-    .mobile-cart {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      position: fixed;
-      z-index: 999;
-      left: 12px;
-      right: 12px;
-      bottom: calc(12px + env(safe-area-inset-bottom));
-      width: auto;
-      min-height: 64px;
-      padding: 12px 17px;
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 16px;
-      background: var(--dark);
-      color: var(--white);
-      box-shadow: 0 5px 22px rgba(0,0,0,.20);
-    }
-  }
-
-  @media (max-width: 650px) {
-    .seasonal { grid-template-columns: 1fr; gap: 25px; padding: 40px 6%; }
-    .seasonal-image { height: 290px; }
-  }
+.cart-title svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
 </style>
 </head>
 <body>
@@ -718,23 +1005,25 @@
 </header>
 
 <main>
-  <section class="hero" id="inicio">
-    <div class="eyebrow">Coffee · Matcha · Chill</div>
-    <h1 id="menuBannerTitle">café sin<br>filtro.</h1>
-    <p id="menuBannerDescription">Tu próximo café favorito, hasta tu puerta.</p>
-    <a id="menuBannerButton" class="primary-btn" href="#menu">Explorar menú ↓</a>
-  </section>
+<section class="hero" id="inicio">
+  <div class="eyebrow">Coffee · Matcha · Chill</div>
+  <h1 id="menuBannerTitle">café sin<br>filtro.</h1>
+  <p id="menuBannerDescription">Tu próximo café favorito, hasta tu puerta.</p>
+  <a id="menuBannerButton" class="primary-btn" href="#menu">Explorar menú ↓</a>
+</section>
 
   <section class="seasonal" id="seasonalSection">
     <div class="seasonal-image">
-      <img id="seasonalImage" src="1790312149990.png" alt="Bebida de temporada VRUTO Café" loading="lazy">
+      <img id="seasonalImage" src="1790312149990.png"
+        alt="Bebida de temporada VRUTO Café" loading="lazy">
     </div>
 
     <div class="seasonal-content">
       <span class="seasonal-label" id="seasonalLabel">EDICIÓN DE TEMPORADA</span>
       <h2 id="seasonalTitle">Pumpkin Spice.</h2>
       <p id="seasonalDescription">
-        Espresso, leche y especias de calabaza. Tu bebida favorita de otoño, a tu manera.
+        Espresso, leche y especias de calabaza.
+        Tu bebida favorita de otoño, a tu manera.
       </p>
 
       <div class="seasonal-prices" id="seasonalPrices">
@@ -742,7 +1031,9 @@
         <span>Frío $85</span>
       </div>
 
-      <a href="#menu" class="seasonal-button" id="seasonalButton">DESCUBRIR EN EL MENÚ →</a>
+      <a href="#menu" class="seasonal-button" id="seasonalButton">
+        DESCUBRIR EN EL MENÚ →
+      </a>
     </div>
 
     <div id="seasonalProducts" class="seasonal-products"></div>
@@ -798,18 +1089,19 @@
 
     <div class="order-layout">
       <div class="panel" id="cartPanel">
-        <h3 class="cart-title">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 7H6"
-              fill="none" stroke="currentColor" stroke-width="1.8"
-              stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="10" cy="20" r="1" fill="currentColor"/>
-            <circle cx="18" cy="20" r="1" fill="currentColor"/>
-          </svg>
-          Mi carrito
-        </h3>
-        
-        <div id="cartItems">
+<h3 class="cart-title">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3 3h2l2.4 12.2a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 7H6"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"/>
+    <circle cx="10" cy="20" r="1" fill="currentColor"/>
+    <circle cx="18" cy="20" r="1" fill="currentColor"/>
+  </svg>
+  Mi carrito
+</h3>        <div id="cartItems">
           <p class="empty">Tu carrito está vacío. Agrega algo rico del menú.</p>
         </div>
 
@@ -821,7 +1113,8 @@
         <div class="discount-box">
           <label for="discountCode">¿Tienes un código de descuento?</label>
           <div class="discount-input-row">
-            <input type="text" id="discountCode" placeholder="Ingresa tu código" autocomplete="off" maxlength="30">
+            <input type="text" id="discountCode" placeholder="Ingresa tu código"
+              autocomplete="off" maxlength="30">
             <button type="button" onclick="applyDiscount()">Aplicar</button>
           </div>
           <p id="discountStatus" class="discount-status" aria-live="polite"></p>
@@ -843,16 +1136,24 @@
       </div>
 
       <div class="panel">
-        <h3 class="cart-title">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"
-              fill="none" stroke="currentColor" stroke-width="1.8"
-              stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="12" cy="10" r="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/>
-          </svg>
-          Datos de entrega
-        </h3>
-        <form id="orderForm">
+<h3 class="cart-title">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <circle cx="12" cy="10" r="2.5"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+    />
+  </svg>
+  Datos de entrega
+</h3>        <form id="orderForm">
           <div class="field">
             <label for="customerName">Nombre *</label>
             <input id="customerName" name="customerName" required placeholder="¿A nombre de quién?">
@@ -936,6 +1237,7 @@
     <a href="https://www.instagram.com/vrutocafe/" target="_blank" rel="noopener noreferrer">Instagram</a>
     <a href="https://wa.me/526693683462" target="_blank" rel="noopener noreferrer">WhatsApp</a>
   </div>
+  <!-- Botón de ajustes integrado en el footer -->
   <div>
     <a href="admin.html" class="footer-settings-btn" style="text-decoration: none;">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -945,6 +1247,7 @@
       Ajustes
     </a>
   </div>
+
   <small>© <span id="year"></span> VRUTO Café</small>
 </footer>
 
@@ -965,33 +1268,44 @@ const WHATSAPP_NUMBER = "526693683462";
 const SUPABASE_URL = "https://eqguxuacvdvdbxtxbogf.supabase.co";
 const SUPABASE_PUBLIC_KEY = "sb_publishable_Y0Qdy8M6MBssMeHy52WhMQ_5mcCnMfD";
 
-let menuData = [];
-let menuCategories = [];
-let cart = [];
-let currentFilter = "Fríos";
-const money = amount => "$" + Number(amount || 0).toFixed(2) + " MXN";
-
-const DISCOUNT_CODES = {
-  OFFICE15: {percentage:15,minDrinks:3,zone:"Centro"}
-};
-
-let appliedPromo = null;
-
-const milkOptions = [
-  {value:"Entera",label:"Leche entera"},
-  {value:"Deslactosada",label:"Leche deslactosada"},
-  {value:"Deslactosada Light",label:"Leche deslactosada Light"},
-  {value:"Almendra",label:"Leche de almendra (+$15)",extra:15},
-  {value:"Sin leche",label:"Sin leche"}
+let menuData = [
+  {id:1,name:"Americano",category:"Calientes",description:"Espresso con agua caliente.",hot:true,milk:false,prices:{"12 oz":50,"16 oz":60},sugar:true},
+  {id:2,name:"Latte Regular",category:"Calientes",description:"Espresso con leche cremosa.",hot:true,milk:true,prices:{"12 oz":65,"16 oz":75},sugar:true},
+  {id:3,name:"Latte Caramel",category:"Calientes",description:"Espresso, leche y caramelo.",hot:true,milk:true,prices:{"12 oz":70,"16 oz":80},coldPrice:78},
+  {id:4,name:"Latte Vainilla",category:"Calientes",description:"Latte suave con un toque de vainilla.",hot:true,milk:true,prices:{"12 oz":70,"16 oz":80},coldPrice:75},
+  {id:5,name:"Moka Latte",category:"Calientes",description:"Latte con chocolate.",hot:true,milk:true,prices:{"12 oz":70,"16 oz":80},coldPrice:78},
+  {id:6,name:"Chai Latte",category:"Calientes",description:"Té chai especiado con leche.",hot:true,milk:true,prices:{"12 oz":70,"16 oz":80},coldPrice:78},
+  {id:7,name:"Chai Sucio",category:"Calientes",description:"Chai especiado con espresso.",hot:true,milk:true,prices:{"12 oz":80,"16 oz":90},coldPrice:85},
+  {id:8,name:"Matcha",category:"Calientes",description:"Matcha cremoso y equilibrado.",hot:true,milk:true,prices:{"12 oz":75,"16 oz":85},coldPrice:85},
+  {id:9,name:"Taro Latte",category:"Calientes",description:"Bebida cremosa de taro.",hot:true,milk:true,prices:{"12 oz":75,"16 oz":85},coldPrice:80},
+  {id:10,name:"Americano Frío",displayName:"Americano",category:"Fríos",description:"Espresso con agua y hielo.",hot:false,milk:false,coldPrice:60,sugar:true},
+  {id:11,name:"Latte Regular Frío",displayName:"Latte Reg.",category:"Fríos",description:"Latte helado, suave y cremoso.",hot:false,milk:true,coldPrice:75,sugar:true},
+  {id:12,name:"Caramelo Frío",displayName:"Caramelo",category:"Fríos",description:"Latte helado con caramelo.",hot:false,milk:true,coldPrice:78},
+  {id:13,name:"Vainilla Fría",displayName:"Vainilla",category:"Fríos",description:"Latte helado con vainilla.",hot:false,milk:true,coldPrice:75},
+  {id:14,name:"Moka Latte Frío",displayName:"Moka Latte",category:"Fríos",description:"Latte helado con chocolate.",hot:false,milk:true,coldPrice:78},
+  {id:15,name:"Chai Latte Frío",displayName:"Chai Latte",category:"Fríos",description:"Chai especiado con leche y hielo.",hot:false,milk:true,coldPrice:78},
+  {id:16,name:"Chai Sucio Frío",displayName:"Chai Sucio",category:"Fríos",description:"Chai con espresso, leche y hielo.",hot:false,milk:true,coldPrice:85},
+  {id:17,name:"Matcha Frío",displayName:"Matcha",category:"Fríos",description:"Matcha helado y cremoso.",hot:false,milk:true,coldPrice:85},
+  {id:18,name:"Taro Latte Frío",displayName:"Taro Latte",category:"Fríos",description:"Taro con leche y hielo.",hot:false,milk:true,coldPrice:80},
+  {id:19,name:"Pumpkin Spice Caliente",displayName:"Pumpkin Spice Caliente",category:"Especiales",description:"Espresso, leche y especias de calabaza.",hot:true,milk:true,prices:{"12 oz":70,"16 oz":80},isSpecial:true},
+  {id:20,name:"Pumpkin Spice Frío",displayName:"Pumpkin Spice Frío",category:"Especiales",description:"Pumpkin Spice Latte helado con notas de calabaza y especias.",hot:false,milk:true,coldPrice:85,isSpecial:true}
 ];
 
+  const milkOptions = [
+    {value:"Entera",label:"Leche entera"},
+    {value:"Deslactosada",label:"Leche deslactosada"},
+    {value:"Deslactosada Light",label:"Leche deslactosada Light"},
+    {value:"Almendra",label:"Leche de almendra (+$15)",extra:15},
+    {value:"Sin leche",label:"Sin leche"}
+  ];
+  
 let extraOptions = [
   {value:"shot",label:"Shot extra (+$15)",price:15,active:true},
   {value:"syrup",label:"Jarabe extra (+$15)",price:15,active:true}
-];
-
-async function loadMenuExtras() {
+];  
+  async function loadMenuExtras() {
   try {
+
     const response = await fetch(
       `${SUPABASE_URL}/rest/v1/site_settings?select=value&key=eq.menu_extras`,
       {
@@ -1003,16 +1317,28 @@ async function loadMenuExtras() {
       }
     );
 
-    if (!response.ok) throw new Error(`Error al cargar extras: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Error al cargar extras: ${response.status}`);
+    }
 
     const rows = await response.json();
-    if (!Array.isArray(rows) || !rows.length) return;
+
+    // Si todavía no existe configuración, conservar extras originales.
+    if (!Array.isArray(rows) || !rows.length) {
+      console.log("VRUTO: Se conservan los extras originales.");
+      return;
+    }
 
     const savedExtras = rows[0].value?.extras;
+
     if (!Array.isArray(savedExtras)) return;
 
     extraOptions = savedExtras
-      .filter(extra => extra && extra.active !== false && typeof extra.value === "string")
+      .filter(extra =>
+        extra &&
+        extra.active !== false &&
+        typeof extra.value === "string"
+      )
       .map(extra => ({
         value: extra.value,
         label: `${extra.label} (+$${Number(extra.price || 0).toFixed(2)})`,
@@ -1021,10 +1347,60 @@ async function loadMenuExtras() {
       }));
 
     renderCart();
+
+    console.log("VRUTO: Extras actualizados desde Supabase.");
+
   } catch (error) {
+
     console.error("No se pudieron cargar los extras:", error);
+
   }
 }
+
+  try {
+
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", "menu_extras")
+      .maybeSingle();
+
+    if (error) throw error;
+
+    // Si todavía no existe configuración, conservamos
+    // los extras originales de VRUTO.
+    if (!data || !Array.isArray(data.value?.extras)) {
+      return;
+    }
+
+    extraOptions = data.value.extras
+      .filter(extra => extra.active !== false)
+      .map(extra => ({
+        value: extra.value,
+        label: `${extra.label} (+$${Number(extra.price).toFixed(0)})`,
+        price: Number(extra.price) || 0
+      }));
+
+    renderCart();
+
+  } catch (error) {
+
+    console.error("Error cargando extras:", error);
+
+  }
+
+}
+let menuCategories = [];
+let cart = [];
+let currentFilter = "Fríos";
+const money = amount => "$" + Number(amount || 0).toFixed(2) + " MXN";
+
+/* CÓDIGOS PROMOCIONALES VRUTO CAFÉ */
+const DISCOUNT_CODES = {
+  OFFICE15: {percentage:15,minDrinks:3,zone:"Centro"}
+};
+
+let appliedPromo = null;
 
 function getDrinkCount() {
   return cart.reduce((sum,item) => sum + Number(item.quantity || 1),0);
@@ -1166,17 +1542,19 @@ function getPrice(product,size) {
 function renderMenu() {
   const grid = document.getElementById("menuGrid");
 
-  const filtered = menuData.filter(item => {
-    if (currentFilter === "Especiales") return item.isSpecial === true;
+const filtered = menuData.filter(item => {
+  if (currentFilter === "Especiales") return item.isSpecial === true;
 
-    if (currentFilter === "Calientes") {
-      return item.hot === true && item.category === "Calientes";
-    }
+  if (currentFilter === "Calientes") {
+    return item.hot === true && item.category === "Calientes";
+  }
 
-    if (currentFilter === "Fríos") return item.hot === false;
+  if (currentFilter === "Fríos") return item.hot === false;
 
-    return item.category === currentFilter;
-  });
+  return item.category === currentFilter;
+});
+  // Detecta si solo hay 1 artículo en la categoría actual
+  const isSingle = filtered.length === 1;
 
   grid.innerHTML = filtered.map((item, index) => {
     const label = escapeHTML(item.displayName || item.name);
@@ -1198,6 +1576,7 @@ function renderMenu() {
 
   observeRevealElements();
 }
+
 
 function renderFilters() {
   const filters = document.getElementById("menuFilters");
@@ -1318,8 +1697,8 @@ function renderCart() {
             maxlength="40"
             placeholder="Ej. Ana, Carlos..."
             value="${escapeHTML(item.customerName || "")}"
-            oninput="updateCustomerName('${item.cartId}', this.value)"
-          >
+                oninput="updateCustomerName('${item.cartId}', this.value)" 
+                >
           <p>Identifica cada bebida si tu pedido es para varias personas.</p>
         </div>
 
@@ -1346,23 +1725,26 @@ function renderCart() {
           </select>
         </div>` : ""}
 
-        <div>
-          <label>Extras y agregados</label>
-          ${extraOptions
-            .filter(option => option.active !== false)
-            .map(option => `
-              <label style="font-weight:500;display:flex;align-items:center;gap:8px;margin:7px 0">
-                <input
-                  type="checkbox"
-                  ${item.extras.includes(option.value) ? "checked" : ""}
-                  onchange="toggleExtra('${item.cartId}','${option.value}',this.checked)"
-                  style="width:auto"
-                >
-                ${escapeHTML(option.label)}
-              </label>
-            `).join("")}
-        </div>
+<div>
+  <label>Extras y agregados</label>
 
+  ${extraOptions
+    .filter(option => option.active !== false)
+    .map(option => `
+      <label style="font-weight:500;display:flex;align-items:center;gap:8px;margin:7px 0">
+
+        <input
+          type="checkbox"
+          ${item.extras.includes(option.value) ? "checked" : ""}
+          onchange="toggleExtra('${item.cartId}','${option.value}',this.checked)"
+          style="width:auto"
+        >
+
+        ${escapeHTML(option.label)}
+
+      </label>
+    `).join("")}
+</div>
         <div>
           <label for="note-${item.cartId}">Notas de esta bebida</label>
           <textarea id="note-${item.cartId}" placeholder="Ej. sin hielo, poco dulce..."
@@ -1378,10 +1760,12 @@ function renderCart() {
 }
 
 function updateCustomerName(id, value) {
-  const item = cart.find(i => String(i.cartId) === String(id));
-  if (item) { item.customerName = value; }
-}
+const item = cart.find(i => String(i.cartId) === String(id));
 
+if (item) {
+item.customerName = value;
+}
+}
 function updateSize(id,size) {
   const item = cart.find(i => i.cartId === id);
   const product = item && menuData.find(p => String(p.id) === String(item.id));
@@ -1485,14 +1869,16 @@ document.getElementById("orderForm").addEventListener("submit",function(event) {
     const product = menuData.find(p => String(p.id) === String(item.id));
     const quantity = item.quantity || 1;
 
-    if (item.customerName && item.customerName.trim()) {
-      message += "\n👤 *" + item.customerName.trim() + "*\n";
-    }
+    
+if (item.customerName && item.customerName.trim()) {
+  message += "\n👤 *" + item.customerName.trim() + "*\n";
+}
 
-    message +=
-      "*BEBIDA " + (index + 1) + " · " + item.name + "*\n" +
-      "• Tamaño: " + item.size + "\n" +
-      "• Cantidad: " + quantity + "\n";
+message +=
+  "*BEBIDA " + (index + 1) + " · " + item.name + "*\n" +
+  "• Tamaño: " + item.size + "\n" +
+  "• Cantidad: " + quantity + "\n";
+
 
     if (product && product.milk) message += "• Leche: " + item.milk + "\n";
     if (product && product.sugar) message += "• Azúcar: " + item.sugar + "\n";
@@ -1506,20 +1892,24 @@ document.getElementById("orderForm").addEventListener("submit",function(event) {
 
     if (item.note.trim()) message += "• Indicaciones: " + item.note.trim() + "\n";
 
-    const precioBebida = itemPrice(item) * quantity;
-    message += "• Precio por bebida: " + money(itemPrice(item)) + "\n";
+    
+const precioBebida = itemPrice(item) * quantity;
 
-    if (appliedPromo && discount > 0 && subtotal > 0) {
-      const descuentoBebida = precioBebida * (discount / subtotal);
-      const importeConDescuento = precioBebida - descuentoBebida;
+message +=
+  "• Precio por bebida: " + money(itemPrice(item)) + "\n";
 
-      message +=
-        "• Importe original: " + money(precioBebida) + "\n" +
-        "• *Importe con descuento: " + money(importeConDescuento) + "*\n";
-    } else {
-      message += "• *Importe: " + money(precioBebida) + "*\n";
-    }
-  });
+if (appliedPromo && discount > 0 && subtotal > 0) {
+  const descuentoBebida = precioBebida * (discount / subtotal);
+  const importeConDescuento = precioBebida - descuentoBebida;
+
+  message +=
+    "• Importe original: " + money(precioBebida) + "\n" +
+    "• *Importe con descuento: " + money(importeConDescuento) + "*\n";
+} else {
+  message +=
+    "• *Importe: " + money(precioBebida) + "*\n";
+}
+}); // Cierra cart.forEach
 
   message +=
     "\n━━━━━━━━━━━━━━━━━━\n" +
@@ -1535,19 +1925,20 @@ document.getElementById("orderForm").addEventListener("submit",function(event) {
       "• Descuento (" + appliedPromo.percentage + "%): -" + money(discount) + "\n";
   }
 
-  message +=
-    "• Envío: Por confirmar\n" +
-    "• *TOTAL DE BEBIDAS: " + money(total) + "*\n" +
-    "• Total final con envío: Por confirmar\n\n" +
-    "💳 *MÉTODO DE PAGO*\n" +
-    "Transferencia bancaria\n\n" +
-    "━━━━━━━━━━━━━━━━━━\n" +
-    "🏦 *VRUTO CAFÉ · DATOS DE PAGO*\n" +
-    "━━━━━━━━━━━━━━━━━━\n" +
-    "• Banco: BanCoppel\n" +
-    "• Titular: Daniel Camacho\n" +
-    "• Tarjeta: 4169 1608 5448 6710\n\n" +
-    "_Envía tu comprobante por este medio para confirmar tu pedido._\n";
+  
+message +=
+  "• Envío: Por confirmar\n" +
+  "• *TOTAL DE BEBIDAS: " + money(total) + "*\n" +
+  "• Total final con envío: Por confirmar\n\n" +
+  "💳 *MÉTODO DE PAGO*\n" +
+  "Transferencia bancaria\n\n" +
+  "━━━━━━━━━━━━━━━━━━\n" +
+  "🏦 *VRUTO CAFÉ · DATOS DE PAGO*\n" +
+  "━━━━━━━━━━━━━━━━━━\n" +
+  "• Banco: BanCoppel\n" +
+  "• Titular: Daniel Camacho\n" +
+  "• Tarjeta: 4169 1608 5448 6710\n\n" +
+  "_Envía tu comprobante por este medio para confirmar tu pedido._\n";
 
   if (generalNotes) message += "\n📝 *NOTAS ADICIONALES*\n" + generalNotes + "\n";
 
@@ -1584,6 +1975,14 @@ function observeRevealElements() {
   elements.forEach(element => observer.observe(element));
 }
 
+const revealElements = document.querySelectorAll(
+  ".seasonal-image, .seasonal-content, #menu .section-heading, " +
+  "#menu .filters, #pedido .section-heading, #pedido .panel, " +
+  ".vruto-instagram, .about > *"
+);
+
+revealElements.forEach(element => element.classList.add("reveal"));
+
 async function loadMenuFromSupabase() {
   try {
     const headers = {
@@ -1591,14 +1990,14 @@ async function loadMenuFromSupabase() {
       Authorization: `Bearer ${SUPABASE_PUBLIC_KEY}`
     };
 
-    const [productsResponse, categoriesResponse] = await Promise.all([
+    const [productsResponse,categoriesResponse] = await Promise.all([
       fetch(
         `${SUPABASE_URL}/rest/v1/products?select=id,name,category_id,description,product_type,cold_price,hot_price_12,hot_price_16,available,sort_order,is_special&available=eq.true&order=sort_order.asc`,
-        {headers, cache:"no-store"}
+        {headers,cache:"no-store"}
       ),
       fetch(
         `${SUPABASE_URL}/rest/v1/categories?select=id,name,sort_order,active&active=eq.true&order=sort_order.asc`,
-        {headers, cache:"no-store"}
+        {headers,cache:"no-store"}
       )
     ]);
 
@@ -1609,6 +2008,7 @@ async function loadMenuFromSupabase() {
     menuCategories = await categoriesResponse.json();
 
     if (!Array.isArray(products) || products.length === 0) {
+      console.warn("No hay productos disponibles en Supabase; se conserva el menú de respaldo.");
       renderFilters();
       renderMenu();
       return;
@@ -1644,8 +2044,10 @@ async function loadMenuFromSupabase() {
     renderFilters();
     renderMenu();
     renderCart();
+
+    console.log(`VRUTO Café: ${menuData.length} productos cargados desde Supabase.`);
   } catch (error) {
-    console.error("No se pudo cargar el menú desde Supabase:", error);
+    console.error("No se pudo cargar el menú desde Supabase:",error);
     renderFilters();
     renderMenu();
   }
@@ -1702,10 +2104,9 @@ async function loadSeasonalFromSupabase() {
     button.textContent = season.button_text || "DESCUBRIR EN EL MENÚ →";
     button.href = season.button_url || "#menu";
   } catch (error) {
-    console.error("No se pudo cargar la temporada:", error);
+    console.error("No se pudo cargar la temporada:",error);
   }
 }
-
 async function loadMenuBannerFromSupabase() {
   try {
     const headers = {
@@ -1718,12 +2119,24 @@ async function loadMenuBannerFromSupabase() {
       { headers, cache: "no-store" }
     );
 
-    if (!response.ok) throw new Error(`Error al cargar el banner: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Error al cargar el banner: ${response.status}`);
+    }
 
     const rows = await response.json();
     if (!rows.length || !rows[0].value) return;
 
     const banner = rows[0].value;
+
+    // No aplicar los valores de ejemplo de la configuración inicial.
+    if (
+      banner.title === "Café sin filtro" &&
+      banner.description === "Tu café favorito, directo hasta ti." &&
+      !(banner.image_url || banner.image)
+    ) {
+      return;
+    }
+
     const hero = document.querySelector(".hero");
     if (!hero) return;
 
@@ -1739,7 +2152,9 @@ async function loadMenuBannerFromSupabase() {
     const button = document.getElementById("menuBannerButton");
 
     if (title && banner.title) title.textContent = banner.title;
-    if (description && banner.description) description.textContent = banner.description;
+    if (description && banner.description) {
+      description.textContent = banner.description;
+    }
 
     if (button && banner.button_text) {
       button.textContent = banner.button_text;
@@ -1747,14 +2162,20 @@ async function loadMenuBannerFromSupabase() {
     }
 
     const imageUrl = banner.image_url || banner.image;
-    if (imageUrl && /^https?:\/\//i.test(imageUrl)) {
-      hero.style.backgroundImage = `linear-gradient(rgba(30,32,24,.35),rgba(30,32,24,.35)),url("${imageUrl}")`;
+
+    if (imageUrl) {
+      const validUrl = /^https?:\/\//i.test(imageUrl);
+
+      if (validUrl) {
+        hero.style.backgroundImage =
+          `linear-gradient(rgba(30,32,24,.35),rgba(30,32,24,.35)),url("${imageUrl}")`;
+      }
     }
   } catch (error) {
     console.error("No se pudo cargar el banner de VRUTO:", error);
   }
 }
-
+  
 loadMenuBannerFromSupabase();
 renderFilters();
 renderMenu();
