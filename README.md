@@ -561,7 +561,7 @@
 
   .footer-logo {
     display: block;
-    width: 85px;
+    width: 100%;
     height: auto;
     margin: 0 auto 3px;
     padding: 0;
