@@ -1372,7 +1372,7 @@
   <small>© <span id="year"></span> VRUTO Café</small>
 </footer>
 
-<button class="mobile-cart" onclick="goToCart()">
+<button class="mobile-cart" onclick="goToCart()" hidden>
   <span class="mobile-cart-info">
     <span id="mobileCartLabel">Ver carrito</span>
     <span class="mobile-cart-detail">
@@ -1912,7 +1912,21 @@ function escapeHTML(value) {
 function goToCart() {
   document.getElementById("pedido").scrollIntoView({behavior:"smooth"});
 }
+// Control de visibilidad de la barra móvil
+const mobileCartBar = document.querySelector(".mobile-cart");
+const menuSection = document.getElementById("menu");
 
+if (mobileCartBar && menuSection) {
+  const menuObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      mobileCartBar.hidden = !entry.isIntersecting;
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  menuObserver.observe(menuSection);
+}
 document.getElementById("orderForm").addEventListener("submit",function(event) {
   event.preventDefault();
 
