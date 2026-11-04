@@ -1103,6 +1103,28 @@
 .extras-dropdown .extras-selector {
   padding: 0 10px 10px;
 }
+/* Animación de la barra móvil VRUTO */
+.mobile-cart {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(18px);
+  transition:
+    opacity .35s ease,
+    transform .35s cubic-bezier(.22, 1, .36, 1),
+    visibility .35s ease;
+  pointer-events: none;
+}
+
+.mobile-cart.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.mobile-cart[hidden] {
+  display: none !important;
+}
 </style>
 </head>
 <body>
@@ -1912,14 +1934,28 @@ function escapeHTML(value) {
 function goToCart() {
   document.getElementById("pedido").scrollIntoView({behavior:"smooth"});
 }
-// Control de visibilidad de la barra móvil
+// Control animado de la barra móvil
 const mobileCartBar = document.querySelector(".mobile-cart");
 const menuSection = document.getElementById("menu");
 
 if (mobileCartBar && menuSection) {
   const menuObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      mobileCartBar.hidden = !entry.isIntersecting;
+      if (entry.isIntersecting) {
+        mobileCartBar.hidden = false;
+
+        requestAnimationFrame(() => {
+          mobileCartBar.classList.add("active");
+        });
+      } else {
+        mobileCartBar.classList.remove("active");
+
+        setTimeout(() => {
+          if (!mobileCartBar.classList.contains("active")) {
+            mobileCartBar.hidden = true;
+          }
+        }, 350);
+      }
     });
   }, {
     threshold: 0.1
