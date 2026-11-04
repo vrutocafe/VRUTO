@@ -1126,23 +1126,35 @@
   display: none !important;
 }
 
-/* FOOTER VRUTO - ANCHO COMPLETO */
+
+/* FOOTER VRUTO - RESTAURACIÓN */
 .main-footer {
   display: block;
-  position: relative;
-  width: 100% !important;
-  min-width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
+  width: 100%;
+  max-width: none;
   box-sizing: border-box;
-  background: #343a27;
+  margin: 0 !important;
+
+  background: var(--olive);
   color: var(--white);
   text-align: center;
-  padding: 38px 20px 25px !important;
-  min-height: 230px;
+
+  padding: 22px 15px 18px !important;
   font-size: 12px;
-  line-height: 1.6 !important;
+  line-height: 1.4 !important;
+  min-height: auto;
 }
+
+/* Tamaño correcto del logotipo */
+.main-footer .footer-logo {
+  display: block;
+  width: 78px !important;
+  max-width: 78px !important;
+  height: auto;
+  margin: 0 auto 8px;
+  object-fit: contain;
+}
+
 </style>
 </head>
 <body>
