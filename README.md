@@ -561,7 +561,7 @@
 
   .footer-logo {
     display: block;
-    width: 65px;
+    width: 85px;
     height: auto;
     margin: 0 auto 3px;
     padding: 0;
@@ -1124,6 +1124,24 @@
 
 .mobile-cart[hidden] {
   display: none !important;
+}
+.main-footer {
+  display: block;
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw) !important;
+
+  background: var(--dark);
+  color: var(--white);
+  text-align: center;
+
+  padding: 38px 20px 25px !important;
+  min-height: 230px;
+
+  font-size: 12px;
+  line-height: 1.6 !important;
+  margin-bottom: 0 !important;
+  box-sizing: border-box;
 }
 </style>
 </head>
