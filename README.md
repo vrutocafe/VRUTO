@@ -1395,6 +1395,11 @@
             <label for="customerPhone">Teléfono de contacto *</label>
             <input id="customerPhone" name="customerPhone" type="tel" required placeholder="Tu número de teléfono">
           </div>
+          
+          <div class="field">
+            <label for="customerEmail">Correo electrónico <span style="font-weight:400;">(para pago con tarjeta)</span></label>
+            <input id="customerEmail" name="customerEmail" type="email" placeholder="tu@correo.com" autocomplete="email">
+          </div>
 
           <div class="field">
             <label for="deliveryZone">Zona de entrega *</label>
@@ -1421,15 +1426,16 @@
           </div>
 
           <div class="field">
-            <label for="payment">Método de pago</label>
-            <select id="payment" disabled>
-              <option>Transferencia bancaria</option>
+            <label for="payment">Método de pago *</label>
+            <select id="payment" name="payment" required>
+              <option value="transfer">Transferencia por WhatsApp</option>
+              <option value="card">Tarjeta de crédito o débito</option>
             </select>
           </div>
 
-          <div class="notice">
-            <strong>Pago por transferencia bancaria.</strong><br>
-            Al enviar tu pedido por WhatsApp te compartiremos los datos para realizar el pago. Tu pedido se confirma con el negocio.
+          <div class="notice" id="paymentNotice">
+            <strong>Transferencia bancaria.</strong><br>
+            Al enviar tu pedido por WhatsApp te compartiremos los datos para realizar el pago.
           </div>
 
           <button type="submit" class="whatsapp-btn" id="sendOrder">
@@ -2165,6 +2171,66 @@ document.getElementById("orderForm").addEventListener("submit",function(event) {
   const deliveryFee = getDeliveryFee();
   const total = getFinalTotal();
   const totalDrinks = getDrinkCount();
+  const paymentMethod = document.getElementById("payment").value;
+
+  if (paymentMethod === "card") {
+    const email = document.getElementById("customerEmail").value.trim();
+    if (!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+      alert("Ingresa un correo electrónico válido para continuar con el pago con tarjeta.");
+      document.getElementById("customerEmail").focus();
+      return;
+    }
+
+    const sendButton = document.getElementById("sendOrder");
+    sendButton.disabled = true;
+    sendButton.textContent = "Preparando pago...";
+
+    try {
+      const response = await fetch(SUPABASE_URL + "/functions/v1/create-mp-order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_PUBLIC_KEY,
+          "Authorization": "Bearer " + SUPABASE_PUBLIC_KEY
+        },
+        body: JSON.stringify({
+          customer_name: name,
+          customer_phone: phone,
+          customer_email: email,
+          delivery_zone: zone,
+          delivery_address: address,
+          delivery_references: references,
+          general_notes: generalNotes,
+          promo_code: appliedPromo ? appliedPromo.code : null,
+          items: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            size: item.size,
+            quantity: item.quantity || 1,
+            milk: item.milk,
+            extras: item.extras || [],
+            customerName: item.customerName || "",
+            note: item.note || ""
+          }))
+        })
+      });
+
+      const result = await response.json();
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || "No se pudo iniciar el pago.");
+      }
+
+      const checkoutUrl = result.sandbox_url || result.checkout_url;
+      if (!checkoutUrl) throw new Error("Mercado Pago no devolvió el enlace de pago.");
+      window.location.href = checkoutUrl;
+    } catch (error) {
+      console.error("Error al iniciar pago con Mercado Pago:", error);
+      alert(error.message || "No se pudo iniciar el pago. Intenta nuevamente o elige transferencia.");
+      sendButton.disabled = false;
+      sendButton.textContent = "Enviar pedido por WhatsApp";
+    }
+    return;
+  }
 
   let message =
     "\u{2615} *VRUTO CAFÉ* \u{2615}\n" +
