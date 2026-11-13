@@ -2142,7 +2142,7 @@ if (mobileCartBar && menuSection) {
 
   menuObserver.observe(menuSection);
 }
-document.getElementById("orderForm").addEventListener("submit",function(event) {
+document.getElementById("orderForm").addEventListener("submit",async function(event) {
   event.preventDefault();
 
   if (!storeIsOpen) {
