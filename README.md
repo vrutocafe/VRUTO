@@ -2019,17 +2019,17 @@ document.getElementById("orderForm").addEventListener("submit",function(event) {
   const totalDrinks = getDrinkCount();
 
   let message =
-    "☕ *VRUTO CAFÉ* ☕\n" +
+    "\u{2615} *VRUTO CAFÉ* \u{2615}\n" +
     "_café sin filtro._\n" +
     "━━━━━━━━━━━━━━━━━━\n" +
-    "🧾 *NUEVO PEDIDO*\n" +
+    "\u{1F9FE} *NUEVO PEDIDO*\n" +
     "━━━━━━━━━━━━━━━━━━\n\n";
 
   message +=
-    "👤 *DATOS DEL CLIENTE*\n" +
+    "\u{1F464} *DATOS DEL CLIENTE*\n" +
     "• Nombre: " + name + "\n" +
     "• Teléfono: " + phone + "\n\n" +
-    "📍 *DIRECCIÓN DE ENTREGA*\n" +
+    "\u{1F4CD} *DIRECCIÓN DE ENTREGA*\n" +
     "• Zona: " + zone + "\n" +
     "• Dirección: " + address + "\n";
 
@@ -2037,7 +2037,7 @@ document.getElementById("orderForm").addEventListener("submit",function(event) {
 
   message +=
     "\n━━━━━━━━━━━━━━━━━━\n" +
-    "🛍️ *DETALLE DEL PEDIDO*\n" +
+    "\u{1F6CD}\u{FE0F} *DETALLE DEL PEDIDO*\n" +
     "━━━━━━━━━━━━━━━━━━\n";
 
   cart.forEach((item,index) => {
@@ -2046,7 +2046,7 @@ document.getElementById("orderForm").addEventListener("submit",function(event) {
 
     
 if (item.customerName && item.customerName.trim()) {
-  message += "\n👤 *" + item.customerName.trim() + "*\n";
+  message += "\n\u{1F464} *" + item.customerName.trim() + "*\n";
 }
 
 message +=
@@ -2088,7 +2088,7 @@ if (appliedPromo && discount > 0 && subtotal > 0) {
 
   message +=
     "\n━━━━━━━━━━━━━━━━━━\n" +
-    "💰 *RESUMEN DE COMPRA*\n" +
+    "\u{1F4B0} *RESUMEN DE COMPRA*\n" +
     "━━━━━━━━━━━━━━━━━━\n" +
     "• Total de bebidas: " + totalDrinks + "\n" +
     "• Zona de entrega: " + zone + "\n" +
@@ -2105,21 +2105,21 @@ message +=
   "• Envío: Por confirmar\n" +
   "• *TOTAL DE BEBIDAS: " + money(total) + "*\n" +
   "• Total final con envío: Por confirmar\n\n" +
-  "💳 *MÉTODO DE PAGO*\n" +
+  "\u{1F4B3} *MÉTODO DE PAGO*\n" +
   "Transferencia bancaria\n\n" +
   "━━━━━━━━━━━━━━━━━━\n" +
-  "🏦 *VRUTO CAFÉ · DATOS DE PAGO*\n" +
+  "\u{1F3E6} *VRUTO CAFÉ · DATOS DE PAGO*\n" +
   "━━━━━━━━━━━━━━━━━━\n" +
   "• Banco: BanCoppel\n" +
   "• Titular: Daniel Camacho\n" +
   "• Tarjeta: 4169 1608 5448 6710\n\n" +
   "_Envía tu comprobante por este medio para confirmar tu pedido._\n";
 
-  if (generalNotes) message += "\n📝 *NOTAS ADICIONALES*\n" + generalNotes + "\n";
+  if (generalNotes) message += "\n\u{1F4DD} *NOTAS ADICIONALES*\n" + generalNotes + "\n";
 
   message +=
     "\n━━━━━━━━━━━━━━━━━━\n" +
-    "¡Gracias por elegir *VRUTO CAFÉ*! ☕\n\n" +
+    "¡Gracias por elegir *VRUTO CAFÉ*! \u{2615}\n\n" +
     "Hola, quiero confirmar este pedido.";
 
   const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
