@@ -2142,6 +2142,18 @@ if (mobileCartBar && menuSection) {
 
   menuObserver.observe(menuSection);
 }
+const paymentSelector = document.getElementById("payment");
+const paymentButton = document.getElementById("sendOrder");
+const paymentNotice = document.getElementById("paymentNotice");
+
+paymentSelector.addEventListener("change", function() {
+  const payingByCard = paymentSelector.value === "card";
+  paymentButton.textContent = payingByCard ? "Continuar al pago con tarjeta" : "Enviar pedido por WhatsApp";
+  paymentNotice.innerHTML = payingByCard
+    ? "<strong>Pago seguro con Mercado Pago.</strong><br>Al continuar podrás pagar con tarjeta de crédito o débito. Tu pedido se registra al iniciar el pago."
+    : "<strong>Transferencia bancaria.</strong><br>Al enviar tu pedido por WhatsApp te compartiremos los datos para realizar el pago.";
+});
+
 document.getElementById("orderForm").addEventListener("submit",async function(event) {
   event.preventDefault();
 
