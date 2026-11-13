@@ -2187,7 +2187,7 @@ document.getElementById("orderForm").addEventListener("submit",async function(ev
 
   if (paymentMethod === "card") {
     const email = document.getElementById("customerEmail").value.trim();
-    if (!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       alert("Ingresa un correo electrónico válido para continuar con el pago con tarjeta.");
       document.getElementById("customerEmail").focus();
       return;
