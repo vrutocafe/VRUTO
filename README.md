@@ -33,7 +33,9 @@
     gap: 20px;
     padding: 12px 6%;
     background: var(--cream);
+    border: 0;
     border-bottom: 1px solid var(--border);
+    box-shadow: none;
     position: sticky;
     top: 0;
     z-index: 100;
