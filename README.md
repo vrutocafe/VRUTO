@@ -1397,11 +1397,6 @@
           </div>
           
           <div class="field">
-            <label for="customerEmail">Correo electrónico <span style="font-weight:400;">(para pago con tarjeta)</span></label>
-            <input id="customerEmail" name="customerEmail" type="email" placeholder="tu@correo.com" autocomplete="email">
-          </div>
-
-          <div class="field">
             <label for="deliveryZone">Zona de entrega *</label>
             <select id="deliveryZone" name="deliveryZone" required>
               <option value="">Selecciona tu zona</option>
@@ -1425,13 +1420,7 @@
             <textarea id="generalNotes" name="generalNotes" placeholder="Indicaciones para tu pedido"></textarea>
           </div>
 
-          <div class="field">
-            <label for="payment">Método de pago *</label>
-            <select id="payment" name="payment" required>
-              <option value="transfer">Transferencia por WhatsApp</option>
-              <option value="card">Tarjeta de crédito o débito</option>
-            </select>
-          </div>
+          <input type="hidden" id="payment" name="payment" value="transfer">
 
           <div class="notice" id="paymentNotice">
             <strong>Transferencia bancaria.</strong><br>
