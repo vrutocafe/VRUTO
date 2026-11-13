@@ -174,7 +174,9 @@
     .store-status-bar {gap:7px;padding:8px 12px;font-size:10px}
     .store-status-detail::before {margin-right:6px}
   }
-  .store-closed-notice {margin:18px auto 0;max-width:620px;padding:16px 18px;text-align:center;border:1px solid var(--border);border-radius:14px;background:var(--white);color:var(--dark);font-size:14px;line-height:1.6}
+  body:has(#storeClosedNotice:not([hidden])) .hero {padding-bottom:20px}
+  .store-closed-notice {margin:8px auto 24px;max-width:620px;padding:16px 18px;text-align:center;border:1px solid var(--border);border-radius:14px;background:var(--white);color:var(--dark);font-size:14px;line-height:1.6}
+  .store-closed-notice + .seasonal {padding-top:20px}
   .store-closed-notice strong {display:block;margin-bottom:3px}
   .add-btn:disabled,.whatsapp-btn:disabled {opacity:.42;cursor:not-allowed;transform:none!important}
 
