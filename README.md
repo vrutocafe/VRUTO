@@ -149,7 +149,7 @@
 
   .store-status-bar {
     display:flex;align-items:center;justify-content:center;gap:9px;
-    width:max-content;max-width:calc(100% - 32px);margin:14px auto 0;
+    width:max-content;max-width:calc(100% - 32px);margin:14px auto 22px;
     padding:9px 16px;border:1px solid #e8e2d6;border-radius:999px;
     background:#fbfaf6;color:#343a27;font-size:11px;font-weight:700;
     letter-spacing:.07em;box-shadow:0 3px 12px rgba(52,58,39,.045);
