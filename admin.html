@@ -197,6 +197,10 @@ small{
 
 .wide{grid-column:1/-1}
 
+ .store-mode-preview{display:flex;align-items:center;gap:9px;padding:12px 14px;border-radius:12px;background:#f7f8f2;border:1px solid var(--line);font-size:13px;font-weight:700}
+.store-mode-dot{width:9px;height:9px;border-radius:50%;background:#b94a43;box-shadow:0 0 0 3px #b94a4320}
+.store-mode-preview.open .store-mode-dot{background:#5d9a55;box-shadow:0 0 0 3px #5d9a5520}
+
 .row{
   display:flex;
   align-items:center;
@@ -859,6 +863,22 @@ img.preview{
   </section>
 
   <section id="appPanel" class="hidden">
+    <div class="panel">
+      <h2>Horario y estado del negocio</h2>
+      <p class="muted">Horario automático: lunes a viernes, de 8:00 a 13:00 (hora de Mazatlán). Puedes forzar la apertura o el cierre cuando lo necesites.</p>
+      <form id="storeStatusForm" class="grid">
+        <div class="field wide"><label for="storeMode">Estado de pedidos</label>
+          <select id="storeMode">
+            <option value="auto">Automático según horario</option>
+            <option value="open">Abrir manualmente</option>
+            <option value="closed">Cerrar manualmente</option>
+          </select>
+        </div>
+        <div id="storeModePreview" class="store-mode-preview wide"><span class="store-mode-dot"></span><span id="storeModePreviewText">Consultando estado…</span></div>
+        <div class="row wide"><button id="saveStoreStatus" class="btn" type="submit">Guardar estado</button></div>
+      </form>
+      <div id="storeStatusMsg" class="notice hidden"></div>
+    </div>
     <div class="editor-toggles">
       <button type="button" class="btn editor-toggle" data-target="menuEditors" aria-expanded="false">Editor de Menú <span>＋</span></button>
       <button type="button" class="btn editor-toggle" data-target="seasonEditor" aria-expanded="false">Editor de Temporada <span>＋</span></button>
@@ -1360,10 +1380,49 @@ img.preview{
 
     try {
       await loadAll();
+      await loadStoreStatus();
     } catch (e) {
       message('globalMsg', 'No se pudieron cargar los datos: ' + e.message, 'error');
     }
   }
+
+
+  function getMazatlanStoreOpen(mode) {
+    if (mode === 'open') return true;
+    if (mode === 'closed') return false;
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone:'America/Mazatlan',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'
+    }).formatToParts(new Date());
+    const local = Object.fromEntries(parts.map(part => [part.type,part.value]));
+    const minutes = Number(local.hour) * 60 + Number(local.minute);
+    return ['Mon','Tue','Wed','Thu','Fri'].includes(local.weekday) && minutes >= 480 && minutes < 780;
+  }
+  function renderStoreModePreview() {
+    const isOpen = getMazatlanStoreOpen($('storeMode').value);
+    $('storeModePreview').classList.toggle('open',isOpen);
+    $('storeModePreviewText').textContent = isOpen ? 'ABIERTO · Se pueden recibir pedidos' : 'CERRADO · Los pedidos están desactivados';
+  }
+  async function loadStoreStatus() {
+    const {data,error} = await supabaseClient.from('site_settings').select('value').eq('key','store_status').maybeSingle();
+    if (error) throw error;
+    $('storeMode').value = ['auto','open','closed'].includes(data?.value?.mode) ? data.value.mode : 'auto';
+    renderStoreModePreview();
+  }
+  $('storeMode').addEventListener('change',renderStoreModePreview);
+  $('storeStatusForm').addEventListener('submit',async event => {
+    event.preventDefault();
+    const submit = $('saveStoreStatus'); submit.disabled = true;
+    try {
+      const mode = $('storeMode').value;
+      const value = {mode,schedule:{days:['monday','tuesday','wednesday','thursday','friday'],open:'08:00',close:'13:00'},timezone:'America/Mazatlan'};
+      const {error} = await supabaseClient.from('site_settings').upsert({key:'store_status',value,updated_at:new Date().toISOString()},{onConflict:'key'});
+      if (error) throw error;
+      renderStoreModePreview();
+      message('storeStatusMsg','Estado del negocio actualizado correctamente.','ok');
+    } catch (error) {
+      message('storeStatusMsg','No se pudo guardar: '+error.message,'error');
+    } finally { submit.disabled = false; }
+  });
 
   let discountCodes = [];
 
