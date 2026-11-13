@@ -147,6 +147,14 @@
 
   section { padding: 48px 6%; }
 
+  .store-status-bar {display:flex;align-items:center;justify-content:center;gap:10px;padding:11px 16px;background:var(--white);border-bottom:1px solid var(--border);color:var(--dark);font-size:12px;font-weight:700;letter-spacing:.04em}
+  .store-status-light {width:9px;height:9px;border-radius:50%;display:inline-block;flex:0 0 9px;background:#b94a43;box-shadow:0 0 0 3px rgba(185,74,67,.12)}
+  .store-status-bar.is-open .store-status-light {background:#5d9a55;box-shadow:0 0 0 3px rgba(93,154,85,.14)}
+  .store-status-detail {color:var(--muted);font-weight:500;letter-spacing:0}
+  .store-closed-notice {margin:18px auto 0;max-width:620px;padding:16px 18px;text-align:center;border:1px solid var(--border);border-radius:14px;background:var(--white);color:var(--dark);font-size:14px;line-height:1.6}
+  .store-closed-notice strong {display:block;margin-bottom:3px}
+  .add-btn:disabled,.whatsapp-btn:disabled {opacity:.42;cursor:not-allowed;transform:none!important}
+
   .section-heading { text-align: center; margin-bottom: 28px; }
   .section-heading h2 { font-size: 32px; margin: 0 0 8px; }
   .section-heading p { color: var(--muted); margin: 0; }
@@ -1176,6 +1184,11 @@
     <span class="cart-badge" id="cartCount">0</span>
   </button>
 </header>
+<div id="storeStatusBar" class="store-status-bar is-closed" role="status" aria-live="polite">
+  <span class="store-status-light" aria-hidden="true"></span>
+  <span id="storeStatusText">CERRADO</span>
+  <span class="store-status-detail" id="storeStatusDetail">Lun–Vie · 8:00 a 13:00</span>
+</div>
 
 <main>
 <section class="hero" id="inicio">
@@ -1184,6 +1197,11 @@
   <p id="menuBannerDescription">Tu próximo café favorito, hasta tu puerta.</p>
   <a id="menuBannerButton" class="primary-btn" href="#menu">Explorar menú ↓</a>
 </section>
+
+  <div id="storeClosedNotice" class="store-closed-notice" hidden>
+    <strong>En este momento estamos cerrados.</strong>
+    Nuestro horario es de lunes a viernes, de 8:00 a 13:00. ¡Te esperamos pronto!
+  </div>
 
   <section class="seasonal" id="seasonalSection">
     <div class="seasonal-image">
@@ -1438,6 +1456,10 @@
 "use strict";
 
 const WHATSAPP_NUMBER = "526693683462";
+const STORE_TIME_ZONE = "America/Mazatlan";
+let storeIsOpen = false;
+let storeManualMode = "auto";
+let storeStatusTimer = null;
 const SUPABASE_URL = "https://eqguxuacvdvdbxtxbogf.supabase.co";
 const SUPABASE_PUBLIC_KEY = "sb_publishable_Y0Qdy8M6MBssMeHy52WhMQ_5mcCnMfD";
 
@@ -1672,6 +1694,60 @@ document.getElementById("discountCode").addEventListener("input",() => {
   renderCart();
 });
 
+
+function getStoreLocalParts() {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: STORE_TIME_ZONE, weekday: "short", hour: "2-digit",
+    minute: "2-digit", hourCycle: "h23"
+  }).formatToParts(new Date());
+  return Object.fromEntries(parts.map(part => [part.type, part.value]));
+}
+function isStoreWithinSchedule() {
+  const local = getStoreLocalParts();
+  const minutes = Number(local.hour) * 60 + Number(local.minute);
+  return ["Mon","Tue","Wed","Thu","Fri"].includes(local.weekday) && minutes >= 480 && minutes < 780;
+}
+function updateStoreStatus() {
+  storeIsOpen = storeManualMode === "open" ? true : storeManualMode === "closed" ? false : isStoreWithinSchedule();
+  const bar = document.getElementById("storeStatusBar");
+  const statusText = document.getElementById("storeStatusText");
+  const detail = document.getElementById("storeStatusDetail");
+  if (bar && statusText && detail) {
+    bar.classList.toggle("is-open", storeIsOpen);
+    bar.classList.toggle("is-closed", !storeIsOpen);
+    statusText.textContent = storeIsOpen ? "ABIERTO" : "CERRADO";
+    detail.textContent = storeIsOpen ? "Recibimos pedidos · Lun–Vie · 8:00 a 13:00" : "Lun–Vie · 8:00 a 13:00";
+  }
+  document.querySelectorAll(".add-btn").forEach(button => {
+    button.disabled = !storeIsOpen;
+    button.textContent = storeIsOpen ? "+ Agregar al carrito" : "No disponible por ahora";
+  });
+  const sendButton = document.getElementById("sendOrder");
+  if (sendButton) {
+    sendButton.disabled = !storeIsOpen;
+    sendButton.textContent = storeIsOpen ? "Enviar pedido por WhatsApp" : "Pedidos temporalmente cerrados";
+  }
+  const notice = document.getElementById("storeClosedNotice");
+  if (notice) notice.hidden = storeIsOpen;
+}
+async function loadStoreSettings() {
+  try {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/site_settings?select=value&key=eq.store_status`, {
+      headers:{apikey:SUPABASE_PUBLIC_KEY,Authorization:`Bearer ${SUPABASE_PUBLIC_KEY}`},cache:"no-store"
+    });
+    if (!response.ok) throw new Error("No se pudo consultar el estado del negocio.");
+    const rows = await response.json();
+    const settings = rows?.[0]?.value || {};
+    storeManualMode = ["auto","open","closed"].includes(settings.mode) ? settings.mode : "auto";
+  } catch (error) {
+    console.warn("VRUTO: se aplica el horario automático por defecto.", error);
+    storeManualMode = "auto";
+  }
+  updateStoreStatus();
+  if (storeStatusTimer) clearInterval(storeStatusTimer);
+  storeStatusTimer = setInterval(updateStoreStatus, 30000);
+}
+
 function getPrice(product,size) {
   return product.hot
     ? Number(product.prices?.[size] || 0)
@@ -1709,7 +1785,7 @@ const filtered = menuData.filter(item => {
       <div class="product-top"><h3>${label}</h3></div>
       <div class="price">${priceText}</div>
       <p>${description}</p>
-      <button class="add-btn" onclick="addToCart('${String(item.id)}')">+ Agregar al carrito</button>
+      <button class="add-btn" onclick="addToCart('${String(item.id)}')" ${storeIsOpen ? "" : "disabled"}>${storeIsOpen ? "+ Agregar al carrito" : "No disponible por ahora"}</button>
     </article>`;
   }).join("");
 
@@ -1751,6 +1827,10 @@ function renderFilters() {
 }
 
 function addToCart(id) {
+  if (!storeIsOpen) {
+    alert("VRUTO está cerrado. Nuestro horario es de lunes a viernes, de 8:00 a 13:00.");
+    return;
+  }
   const product = menuData.find(p => String(p.id) === String(id));
   if (!product) return;
 
@@ -1996,6 +2076,10 @@ if (mobileCartBar && menuSection) {
 document.getElementById("orderForm").addEventListener("submit",function(event) {
   event.preventDefault();
 
+  if (!storeIsOpen) {
+    alert("VRUTO está cerrado y no puede recibir pedidos en este momento.");
+    return;
+  }
   if (!cart.length) {
     alert("Agrega al menos una bebida a tu carrito antes de enviar el pedido.");
     return;
@@ -2352,6 +2436,7 @@ async function loadMenuBannerFromSupabase() {
 }
   
 loadMenuBannerFromSupabase();
+loadStoreSettings();
 renderFilters();
 renderMenu();
 renderCart();
