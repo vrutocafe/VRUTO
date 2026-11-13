@@ -147,10 +147,31 @@
 
   section { padding: 48px 6%; }
 
-  .store-status-bar {display:flex;align-items:center;justify-content:center;gap:10px;padding:11px 16px;background:var(--white);border-bottom:1px solid var(--border);color:var(--dark);font-size:12px;font-weight:700;letter-spacing:.04em}
-  .store-status-light {width:9px;height:9px;border-radius:50%;display:inline-block;flex:0 0 9px;background:#b94a43;box-shadow:0 0 0 3px rgba(185,74,67,.12)}
-  .store-status-bar.is-open .store-status-light {background:#5d9a55;box-shadow:0 0 0 3px rgba(93,154,85,.14)}
-  .store-status-detail {color:var(--muted);font-weight:500;letter-spacing:0}
+  .store-status-bar {
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    width:max-content;max-width:calc(100% - 32px);margin:14px auto 0;
+    padding:9px 16px;border:1px solid #e8e2d6;border-radius:999px;
+    background:#fbfaf6;color:#343a27;font-size:11px;font-weight:700;
+    letter-spacing:.07em;box-shadow:0 3px 12px rgba(52,58,39,.045);
+    flex-wrap:wrap;text-align:center;
+  }
+  .store-status-light {
+    width:8px;height:8px;border-radius:50%;display:inline-block;flex:0 0 8px;
+    background:#bf6259;box-shadow:0 0 0 3px rgba(191,98,89,.13);
+  }
+  .store-status-bar.is-open {border-color:#dce5d4;background:#f7f9f3}
+  .store-status-bar.is-open .store-status-light {
+    background:#719568;box-shadow:0 0 0 3px rgba(113,149,104,.15);
+  }
+  #storeStatusText {white-space:nowrap}
+  .store-status-detail {
+    color:#858477;font-weight:500;letter-spacing:.015em;
+  }
+  .store-status-detail::before {content:"·";margin-right:8px;color:#c5bdaf}
+  @media(max-width:480px) {
+    .store-status-bar {gap:7px;padding:8px 12px;font-size:10px}
+    .store-status-detail::before {margin-right:6px}
+  }
   .store-closed-notice {margin:18px auto 0;max-width:620px;padding:16px 18px;text-align:center;border:1px solid var(--border);border-radius:14px;background:var(--white);color:var(--dark);font-size:14px;line-height:1.6}
   .store-closed-notice strong {display:block;margin-bottom:3px}
   .add-btn:disabled,.whatsapp-btn:disabled {opacity:.42;cursor:not-allowed;transform:none!important}
