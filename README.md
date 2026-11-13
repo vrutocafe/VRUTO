@@ -1352,13 +1352,18 @@
           <span id="discountAmount" class="discount-amount">-$0.00 MXN</span>
         </div>
 
+        <div class="total-row">
+          <span>Envío</span>
+          <span id="deliveryFee">Selecciona tu zona</span>
+        </div>
+
         <div class="total-row final-total">
-          <span>Total de bebidas</span>
+          <span>Total a pagar</span>
           <span id="finalTotal">$0.00 MXN</span>
         </div>
 
         <p class="empty" style="margin-top:10px;">
-          El costo de envío se confirma por WhatsApp.
+          Envío: $15 en Centro y $20 en otras zonas de Mazatlán.
         </p>
       </div>
 
@@ -1612,8 +1617,15 @@ function getDiscount() {
   return Math.round(getSubtotal() * appliedPromo.percentage) / 100;
 }
 
+function getDeliveryFee() {
+  const zone = document.getElementById("deliveryZone")?.value || "";
+  if (zone === "Centro") return 15;
+  if (zone === "Otra zona") return 20;
+  return 0;
+}
+
 function getFinalTotal() {
-  return Math.max(0,getSubtotal() - getDiscount());
+  return Math.max(0,getSubtotal() - getDiscount()) + getDeliveryFee();
 }
 
 function setDiscountStatus(message,success=false) {
@@ -1680,9 +1692,11 @@ function renderDiscountTotals() {
   }
 
   const discount = getDiscount();
-  const finalTotal = Math.max(0,subtotal - discount);
+  const deliveryFee = getDeliveryFee();
+  const finalTotal = Math.max(0,subtotal - discount) + deliveryFee;
 
   document.getElementById("subtotal").textContent = money(subtotal);
+  document.getElementById("deliveryFee").textContent = deliveryFee ? money(deliveryFee) : "Selecciona tu zona";
   document.getElementById("finalTotal").textContent = money(finalTotal);
 
   const summary = document.getElementById("discountSummary");
@@ -2148,6 +2162,7 @@ document.getElementById("orderForm").addEventListener("submit",function(event) {
 
   const subtotal = getSubtotal();
   const discount = getDiscount();
+  const deliveryFee = getDeliveryFee();
   const total = getFinalTotal();
   const totalDrinks = getDrinkCount();
 
@@ -2235,9 +2250,8 @@ if (appliedPromo && discount > 0 && subtotal > 0) {
 
   
 message +=
-  "• Envío: Por confirmar\n" +
-  "• *TOTAL DE BEBIDAS: " + money(total) + "*\n" +
-  "• Total final con envío: Por confirmar\n\n" +
+  "• Envío: " + money(deliveryFee) + "\n" +
+  "• *TOTAL A PAGAR: " + money(total) + "*\n\n" +
   "\u{1F4B3} *MÉTODO DE PAGO*\n" +
   "Transferencia bancaria\n\n" +
   "━━━━━━━━━━━━━━━━━━\n" +
