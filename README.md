@@ -1,5 +1,14 @@
 <html lang="es">
 <head>
+<!-- Google tag (gtag.js) · VRUTO Café -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GWR2YLSHW6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-GWR2YLSHW6');
+</script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#69734b">
@@ -1877,6 +1886,19 @@ function addToCart(id) {
     customerName: ""
   });
 
+  if (typeof gtag === "function") {
+    gtag("event", "add_to_cart", {
+      currency: "MXN",
+      value: getPrice(product,size),
+      items: [{
+        item_id: String(product.id),
+        item_name: product.name,
+        price: getPrice(product,size),
+        quantity: 1
+      }]
+    });
+  }
+
   renderCart();
 }
 
@@ -2232,6 +2254,19 @@ message +=
     "\n━━━━━━━━━━━━━━━━━━\n" +
     "¡Gracias por elegir *VRUTO CAFÉ*! \u{2615}\n\n" +
     "Hola, quiero confirmar este pedido.";
+
+  if (typeof gtag === "function") {
+    gtag("event", "whatsapp_order_click", {
+      currency: "MXN",
+      value: total,
+      items: cart.map(item => ({
+        item_id: String(item.id),
+        item_name: item.name,
+        price: itemPrice(item),
+        quantity: item.quantity || 1
+      }))
+    });
+  }
 
   const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
   const whatsappWindow = window.open(url,"_blank");
