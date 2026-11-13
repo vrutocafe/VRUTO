@@ -1745,7 +1745,7 @@ async function loadStoreSettings() {
   }
   updateStoreStatus();
   if (storeStatusTimer) clearInterval(storeStatusTimer);
-  storeStatusTimer = setInterval(updateStoreStatus, 30000);
+  storeStatusTimer = setInterval(loadStoreSettings, 30000);
 }
 
 function getPrice(product,size) {
