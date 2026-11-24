@@ -1462,7 +1462,7 @@
   <span>café sin filtro. · Mazatlán, Sinaloa</span>
   <div class="social-links">
     <a href="https://www.instagram.com/vrutocafe/" target="_blank" rel="noopener noreferrer">Instagram</a>
-    <a href="https://wa.me/526693683462" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+    <a href="https://wa.me/526693285696" target="_blank" rel="noopener noreferrer">WhatsApp</a>
   </div>
   <!-- Botón de ajustes integrado en el footer -->
   <div>
@@ -1491,7 +1491,7 @@
 <script>
 "use strict";
 
-const WHATSAPP_NUMBER = "526693683462";
+const WHATSAPP_NUMBER = "526693285696";
 const STORE_TIME_ZONE = "America/Mazatlan";
 let storeIsOpen = false;
 let storeManualMode = "auto";
